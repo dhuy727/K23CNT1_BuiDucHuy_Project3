@@ -5,17 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7d8f7251-0d08-4391-90af-29801f552467" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../bdhlession01-spring-boot/bdhlession01-spring-boot/src/main/java/com/DucHuy/bdhlession01_spring_boot/method_def/ExecuteFunction.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bdhlession02-spring-boot/src/main/java/com/DucHuy/bdhlession02_spring_boot/dependency_injection/DrawShape.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bdhlession02-spring-boot/src/main/java/com/DucHuy/bdhlession02_spring_boot/dependency_injection/Shape.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bdhlession02-spring-boot/src/main/java/com/DucHuy/bdhlession02_spring_boot/tight_loosely_coupling/BubbleSortAlgorithm.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bdhlession02-spring-boot/src/main/java/com/DucHuy/bdhlession02_spring_boot/tight_loosely_coupling/LooselyBubbleSortAlgorithm.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bdhlession02-spring-boot/src/main/java/com/DucHuy/bdhlession02_spring_boot/tight_loosely_coupling/LooselyCoupledService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bdhlession02-spring-boot/src/main/java/com/DucHuy/bdhlession02_spring_boot/tight_loosely_coupling/SortAlgorithm.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bdhlession02-spring-boot/src/main/java/com/DucHuy/bdhlession02_spring_boot/tight_loosely_coupling/TightCouplingService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../bdhlession01-spring-boot/bdhlession01-spring-boot/src/main/java/com/DucHuy/bdhlession01_spring_boot/Bdhlession01SpringBootApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../bdhlession01-spring-boot/bdhlession01-spring-boot/src/main/java/com/DucHuy/bdhlession01_spring_boot/Bdhlession01SpringBootApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/Project3.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/compiler.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/jarRepositories.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/vcs.xml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,20 +41,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.Bdhlession02SpringBootApplication.executor": "Run",
-    "Application.DrawShape.executor": "Run",
-    "Application.LooselyCoupledService.executor": "Run",
-    "Application.TightCouplingService.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Project3/bdhlession02-spring-boot"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Bdhlession02SpringBootApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Application.DrawShape.executor&quot;: &quot;Run&quot;,
+    &quot;Application.LooselyCoupledService.executor&quot;: &quot;Run&quot;,
+    &quot;Application.TightCouplingService.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Project3/bdhlession02-spring-boot&quot;
   }
-}]]></component>
+}</component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="7d8f7251-0d08-4391-90af-29801f552467" name="Changes" comment="" />
