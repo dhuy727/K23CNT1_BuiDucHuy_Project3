@@ -5,14 +5,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-/**
- * Service class: StudentService
- * <p>Lớp dịch vụ thực hiện các chức năng thao tác với List
- Object Student</p>
- *
- * @author Chung Trịnh
- * @version 1.0
- */
+
 @Service
 public class ServiceStudent {
     List<Student> students
