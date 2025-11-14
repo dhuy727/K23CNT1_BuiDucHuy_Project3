@@ -1,0 +1,32 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/_layout :: head(${title})"></head>
+<body>
+
+<header th:replace="fragments/_layout :: header"></header>
+
+<section class="container" style="min-height: 268px">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h1 class="card-title mb-3" th:text="${title}">Trang chủ người dùng</h1>
+                    <p class="card-text">
+                        Đây là <strong>layout trang chủ người dùng</strong> của Huy.
+                    </p>
+                    <p class="card-text">
+                        Bạn có thể hiển thị sản phẩm nổi bật, banner, tin khuyến mại… ở khu vực này.
+                    </p>
+                    <a class="btn btn-primary" th:href="@{/admin/products}">
+                        Đi tới trang quản trị nội dung
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer th:replace="fragments/_layout :: footer"></footer>
+
+</body>
+</html>

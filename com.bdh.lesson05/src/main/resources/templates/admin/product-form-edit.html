@@ -1,0 +1,41 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head th:replace="admin/fragments/_admin_layout :: head(${title})"></head>
+<body>
+
+<header th:replace="admin/fragments/_admin_layout :: header"></header>
+
+<div class="container">
+    <h2 class="mb-3" th:text="${title}">Sửa sản phẩm</h2>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form th:object="${product}"
+                  th:action="@{|/admin/products/edit/${product.id}|}" method="post">
+                <div class="mb-3">
+                    <label class="form-label">ID</label>
+                    <input type="text" class="form-control" th:field="*{id}" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Tên sản phẩm</label>
+                    <input type="text" class="form-control" th:field="*{name}">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Giá</label>
+                    <input type="number" step="1000" class="form-control" th:field="*{price}">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Số lượng</label>
+                    <input type="number" class="form-control" th:field="*{quantity}">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Cập nhật</button>
+                <a th:href="@{/admin/products}" class="btn btn-secondary ms-2">Quay lại danh sách</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="admin/fragments/_admin_layout :: footer"></footer>
+</body>
+</html>
