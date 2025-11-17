@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="76a556fa-01ce-4e2b-81bb-2888e1293fe2" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -28,6 +31,13 @@
     &quot;last_opened_file_path&quot;: &quot;C:/Project3&quot;
   }
 }</component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.27397.103" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="76a556fa-01ce-4e2b-81bb-2888e1293fe2" name="Changes" comment="" />
