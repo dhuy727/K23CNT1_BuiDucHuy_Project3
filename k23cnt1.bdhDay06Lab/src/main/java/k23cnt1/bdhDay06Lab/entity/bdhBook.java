@@ -12,26 +12,45 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class bdhBook {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long bdhId;
-    private String bdhCode;
-    private String bdhName;
-    private String bdhDescription;
-    private String bdhImgUrl;
-    private Integer bdhQuantity;
-    private Double bdhPrice;
-    private Boolean bdhIsActive;
-    //thiết kế mối quan hệ với bảng bdhAuthor
-    @ManyToMany
-    @JoinTable(
-            name = "bdh_book_author",
-            joinColumns = @JoinColumn(name = "bdhBookId"),
-            inverseJoinColumns = @JoinColumn(name = "bdhAuthorId")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long bdhId;
+
+    String bdhCode;
+    String bdhName;
+    String bdhDescription;
+    String bdhImgUrl;
+    Integer bdhQuantity;
+    Double bdhPrice;
+    Boolean bdhIsActive;
+
+    // ===== Quan hệ với bảng trung gian bdh_book_author =====
+    @OneToMany(
+            mappedBy = "bdhBook",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
     )
-    private List<bdhAuthor> bdhAuthor = new ArrayList<>();
+    List<bdhBookAuthor> bdhBookAuthors = new ArrayList<>();
+
+    // ===== Helper cho Thymeleaf: kiểm tra book có author này chưa =====
+    public boolean hasAuthor(Long authorId) {
+        if (bdhBookAuthors == null) return false;
+        return bdhBookAuthors.stream()
+                .anyMatch(ba -> ba.getBdhAuthor() != null
+                        && ba.getBdhAuthor().getBdhId().equals(authorId));
+    }
+
+    // ===== Helper: lấy id chủ biên =====
+    public Long getEditorId() {
+        if (bdhBookAuthors == null) return null;
+        return bdhBookAuthors.stream()
+                .filter(ba -> Boolean.TRUE.equals(ba.getBdhIsEditor()))
+                .map(ba -> ba.getBdhAuthor().getBdhId())
+                .findFirst()
+                .orElse(null);
+    }
 }

@@ -2,6 +2,8 @@ package k23cnt1.bdhDay06Lab.controller;
 
 import k23cnt1.bdhDay06Lab.entity.bdhAuthor;
 import k23cnt1.bdhDay06Lab.entity.bdhBook;
+import k23cnt1.bdhDay06Lab.entity.bdhBookAuthor;
+import k23cnt1.bdhDay06Lab.repository.bdhBookAuthorRepository;
 import k23cnt1.bdhDay06Lab.service.bdhAuthorService;
 import k23cnt1.bdhDay06Lab.service.bdhBookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/bdhbooks")
+
 public class bdhBookController {
 
     @Autowired
@@ -27,6 +30,10 @@ public class bdhBookController {
 
     @Autowired
     private bdhAuthorService bdhAuthorService;
+
+    @Autowired
+    private bdhBookAuthorRepository bdhBookAuthorRepository;
+
 
     private static final String UPLOAD_DIR = "src/main/resources/static/";
     private static final String UPLOAD_PathFile = "images/products/";
@@ -46,14 +53,14 @@ public class bdhBookController {
         return "bdhbooks/bdh-book-form";
     }
 
-    // SAVE (CREATE/UPDATE)
     @PostMapping("/new")
     public String saveBook(@ModelAttribute("bdhBook") bdhBook book,
-                           @RequestParam("bdhAuthorIds") List<Long> bdhAuthorIds,
-                           @RequestParam("imageBook") MultipartFile imageFile) {
+                           @RequestParam(value = "bdhAuthorIds", required = false) List<Long> bdhAuthorIds,
+                           @RequestParam(value = "bdhEditorId", required = false) Long bdhEditorId,
+                           @RequestParam(value = "imageBook", required = false) MultipartFile imageFile) {
 
-        // upload ảnh
-        if (!imageFile.isEmpty()) {
+        // ==== xử lý ảnh (giữ logic cũ của bạn) ====
+        if (imageFile != null && !imageFile.isEmpty()) {
             try {
                 Path uploadPath = Paths.get(UPLOAD_DIR + UPLOAD_PathFile);
                 if (!Files.exists(uploadPath)) {
@@ -73,19 +80,47 @@ public class bdhBookController {
             }
         }
 
-        // gán authors
-        List<bdhAuthor> authors = new ArrayList<>();
-        if (bdhAuthorIds == null) {
-            bdhAuthorIds = new ArrayList<>();
+        // ==== đảm bảo có danh sách tác giả ====
+        if (bdhAuthorIds == null || bdhAuthorIds.isEmpty()) {
+            // không chọn tác giả nào, tuỳ thầy yêu cầu (có thể cho phép hoặc báo lỗi)
+            book.getBdhBookAuthors().clear();
+            bdhBookService.saveBook(book);
+            return "redirect:/bdhbooks";
         }
-        book.setBdhAuthor(authors);
 
+        // nếu bdhEditorId null hoặc không nằm trong list tác giả -> mặc định người đầu tiên là chủ biên
+        if (bdhEditorId == null || !bdhAuthorIds.contains(bdhEditorId)) {
+            bdhEditorId = bdhAuthorIds.get(0);
+        }
+
+        // Xóa các quan hệ cũ (khi edit)
+        book.getBdhBookAuthors().clear();
+
+        List<bdhBookAuthor> relations = new ArrayList<>();
+        for (Long authorId : bdhAuthorIds) {
+            bdhAuthor author = bdhAuthorService.getAuthorsById(authorId);
+            if (author == null) continue;
+
+            bdhBookAuthor relation = new bdhBookAuthor();
+            relation.setBdhBook(book);
+            relation.setBdhAuthor(author);
+            relation.setBdhIsEditor(authorId.equals(bdhEditorId)); // true nếu là chủ biên
+
+            relations.add(relation);
+        }
+
+        book.getBdhBookAuthors().addAll(relations);
+
+        // nhờ cascade = ALL, Hibernate sẽ lưu cả bdhBookAuthor
         bdhBookService.saveBook(book);
+
         return "redirect:/bdhbooks";
     }
 
+
+
     // FORM EDIT
-    @GetMapping("/bdhedit/{id}")
+    @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {
         bdhBook book = bdhBookService.getBookById(id);
         model.addAttribute("bdhBook", book);
@@ -94,7 +129,7 @@ public class bdhBookController {
     }
 
     // DELETE
-    @GetMapping("/bdhdelete/{id}")
+    @GetMapping("/delete/{id}")
     public String deleteBook(@PathVariable Long id) {
         bdhBookService.deleteBook(id);
         return "redirect:/bdhbooks";

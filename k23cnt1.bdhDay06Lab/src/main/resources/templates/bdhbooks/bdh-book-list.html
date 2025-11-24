@@ -33,11 +33,14 @@
             <td th:text="${book.getBdhQuantity()}">Quantity</td>
             <td th:text="${book.getBdhPrice()}">Price</td>
             <td>
-                    <span th:each="author : ${book.getBdhAuthor()}"
-                          class="mx-1 badge rounded-pill bg-warning text-dark"
-                          th:text="${author.getBdhName()}">
-                    </span>
+                <span th:each="ba : ${book.bdhBookAuthors}"
+                      class="mx-1 badge rounded-pill"
+                      th:classappend="${ba.bdhIsEditor} ? ' bg-danger' : ' bg-warning text-dark'">
+                    <span th:text="${ba.bdhAuthor.bdhName}"></span>
+                    <span th:if="${ba.bdhIsEditor}"> (Chủ biên)</span>
+                </span>
             </td>
+
             <td class="actions">
                 <a th:href="@{/bdhbooks/edit/{id}(id=${book.getBdhId()})}">Edit</a>
                 <a th:href="@{/bdhbooks/delete/{id}(id=${book.getBdhId()})}"

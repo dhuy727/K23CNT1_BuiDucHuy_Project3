@@ -77,15 +77,33 @@
                 <div class="row mb-3">
                     <label class="col-sm-2 col-form-label">Authors</label>
                     <div class="col-sm-10">
-                        <div th:each="author : ${bdhAuthors}" class="mx-2 px-2">
-                            <input type="checkbox"
+                        <div th:each="author : ${bdhAuthors}" class="form-check d-flex align-items-center gap-3 mb-1">
+
+                            <!-- checkbox: tác giả được chọn -->
+                            <input class="form-check-input"
+                                   type="checkbox"
                                    name="bdhAuthorIds"
                                    th:value="${author.bdhId}"
-                                   th:checked="${bdhBook.bdhAuthor.contains(author)}"/>
-                            <label th:text="${author.bdhName}"></label>
+                                   th:checked="${bdhBook.hasAuthor(author.bdhId)}"/>
+
+                            <label class="form-check-label" th:text="${author.bdhName}"></label>
+
+                            <!-- radio: chọn 1 chủ biên -->
+                            <div class="form-check ms-3">
+                                <input class="form-check-input"
+                                       type="radio"
+                                       name="bdhEditorId"
+                                       th:value="${author.bdhId}"
+                                       th:checked="${bdhBook.getEditorId() != null and bdhBook.getEditorId() == author.bdhId}"/>
+                                <label class="form-check-label text-muted">Chủ biên</label>
+                            </div>
                         </div>
+                        <small class="text-muted">
+                            * Có thể chọn nhiều tác giả, nhưng chỉ chọn <b>1</b> người là chủ biên.
+                        </small>
                     </div>
                 </div>
+
 
 
                 <div class="row mb-3">

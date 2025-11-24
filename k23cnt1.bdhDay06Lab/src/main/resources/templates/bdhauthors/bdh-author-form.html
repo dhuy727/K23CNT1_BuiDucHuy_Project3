@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <title>Author Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+</head>
+<body style="background: #ccc">
+<section class="container my-3">
+    <form th:action="@{/bdhauthors/new}"
+          th:object="${bdhAuthor}"
+          method="post"
+          enctype="multipart/form-data">
+        <input type="hidden" name="bdhId"
+               th:if="${bdhAuthor.bdhId != null}"
+               th:value="${bdhAuthor.bdhId}"/>
+
+        <div class="card">
+            <div class="card-header">
+                <h3 th:text="${bdhAuthor.bdhId != null ? 'Edit Author' : 'Create Author'}"></h3>
+            </div>
+            <div class="card-body">
+
+                <div class="row mb-3">
+                    <label for="bdhCode" class="col-sm-2 col-form-label">Code</label>
+                    <div class="col-sm-10">
+                        <input type="text"
+                               th:field="*{bdhCode}"
+                               id="bdhCode"
+                               placeholder="Author Code"
+                               class="form-control">
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label for="bdhName" class="col-sm-2 col-form-label">Name</label>
+                    <div class="col-sm-10">
+                        <input type="text"
+                               th:field="*{bdhName}"
+                               id="bdhName"
+                               placeholder="Author Name"
+                               class="form-control">
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label for="bdhDescription" class="col-sm-2 col-form-label">Description</label>
+                    <div class="col-sm-10">
+                        <input type="text"
+                               th:field="*{bdhDescription}"
+                               id="bdhDescription"
+                               placeholder="Author Description"
+                               class="form-control">
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label for="bdhEmail" class="col-sm-2 col-form-label">Email</label>
+                    <div class="col-sm-10">
+                        <input type="email"
+                               th:field="*{bdhEmail}"
+                               id="bdhEmail"
+                               placeholder="Author Email"
+                               class="form-control">
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label for="bdhPhone" class="col-sm-2 col-form-label">Phone</label>
+                    <div class="col-sm-10">
+                        <input type="text"
+                               th:field="*{bdhPhone}"
+                               id="bdhPhone"
+                               placeholder="Author Phone"
+                               class="form-control">
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label for="bdhAddress" class="col-sm-2 col-form-label">Address</label>
+                    <div class="col-sm-10">
+                        <input type="text"
+                               th:field="*{bdhAddress}"
+                               id="bdhAddress"
+                               placeholder="Author Address"
+                               class="form-control">
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label for="bdhImgUrl" class="col-sm-2 col-form-label">Image</label>
+                    <div class="col-sm-10">
+                        <input type="file" name="imageAuthor" id="imageAuthor" class="form-control mb-2"/>
+                        <!-- giữ đường dẫn cũ khi không chọn ảnh mới -->
+                        <input type="hidden"
+                               th:field="*{bdhImgUrl}"
+                               id="bdhImgUrl">
+                        <div th:if="${bdhAuthor.bdhImgUrl != null}">
+                            <img th:src="${bdhAuthor.bdhImgUrl}"
+                                 alt="Author Image"
+                                 style="width:80px;height:auto">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label for="bdhIsActive" class="col-sm-2 col-form-label">Active</label>
+                    <div class="col-sm-10">
+                        <input type="checkbox"
+                               th:field="*{bdhIsActive}"
+                               id="bdhIsActive">
+                    </div>
+                </div>
+
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-success"
+                        th:text="${bdhAuthor.bdhId != null ? 'Update' :'Create'}">
+                    Save
+                </button>
+                <a th:href="@{/bdhauthors}" class="btn btn-secondary">Back to list</a>
+            </div>
+        </div>
+    </form>
+</section>
+</body>
+</html>
