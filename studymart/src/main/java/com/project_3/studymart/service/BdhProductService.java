@@ -30,7 +30,6 @@ public class BdhProductService {
 
     // tạo mới sản phẩm (nhận vào entity có category.id)
     public BdhProduct create(BdhProduct product) {
-        // đảm bảo category tồn tại
         if (product.getCategory() != null && product.getCategory().getId() != null) {
             BdhCategory cat = categoryService.getById(product.getCategory().getId());
             product.setCategory(cat);

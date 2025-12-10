@@ -9,7 +9,6 @@ import java.util.List;
 @Repository
 public interface BdhOrderRepository extends JpaRepository<BdhOrder, Long> {
 
-    // lấy đơn theo customer
     List<BdhOrder> findByCustomer_Id(Long customerId);
 
 }
