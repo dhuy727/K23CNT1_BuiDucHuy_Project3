@@ -6,7 +6,7 @@ import lombok.Data;
 @Entity
 @Table(name = "products")
 @Data
-public class Product {
+public class BdhProduct {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,5 +35,5 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-    private Category category;     // mỗi sản phẩm thuộc 1 danh mục
+    private BdhCategory category;     // mỗi sản phẩm thuộc 1 danh mục
 }

@@ -1,7 +1,7 @@
 package com.project_3.studymart.controller.admin;
 
-import com.project_3.studymart.entity.Product;
-import com.project_3.studymart.service.ProductService;
+import com.project_3.studymart.entity.BdhProduct;
+import com.project_3.studymart.service.BdhProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,28 +10,28 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/admin/products")
 @RequiredArgsConstructor
-public class AdminProductController {
+public class BdhAdminProductController {
 
-    private final ProductService productService;
+    private final BdhProductService productService;
 
     @GetMapping
-    public List<Product> getAll() {
+    public List<BdhProduct> getAll() {
         return productService.getAll();
     }
 
     @GetMapping("/{id}")
-    public Product getById(@PathVariable Long id) {
+    public BdhProduct getById(@PathVariable Long id) {
         return productService.getById(id);
     }
 
     @PostMapping
-    public Product create(@RequestBody Product product) {
+    public BdhProduct create(@RequestBody BdhProduct product) {
         return productService.create(product);
     }
 
     @PutMapping("/{id}")
-    public Product update(@PathVariable Long id,
-                          @RequestBody Product product) {
+    public BdhProduct update(@PathVariable Long id,
+                             @RequestBody BdhProduct product) {
         return productService.update(id, product);
     }
 
@@ -41,17 +41,17 @@ public class AdminProductController {
     }
 
     @GetMapping("/search")
-    public List<Product> search(@RequestParam("q") String keyword) {
+    public List<BdhProduct> search(@RequestParam("q") String keyword) {
         return productService.searchByName(keyword);
     }
 
     @GetMapping("/category/{categoryId}")
-    public List<Product> findByCategory(@PathVariable Long categoryId) {
+    public List<BdhProduct> findByCategory(@PathVariable Long categoryId) {
         return productService.findByCategory(categoryId);
     }
 
     @GetMapping("/brand")
-    public List<Product> findByBrand(@RequestParam("name") String brand) {
+    public List<BdhProduct> findByBrand(@RequestParam("name") String brand) {
         return productService.findByBrand(brand);
     }
 }

@@ -1,7 +1,7 @@
 package com.project_3.studymart.config;
 
-import com.project_3.studymart.entity.Customer;
-import com.project_3.studymart.repository.CustomerRepository;
+import com.project_3.studymart.entity.BdhCustomer;
+import com.project_3.studymart.repository.BdhCustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +21,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final CustomerRepository customerRepository;
+    private final BdhCustomerRepository customerRepository;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -32,7 +32,7 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> {
-            Customer c = customerRepository.findByUsername(username)
+            BdhCustomer c = customerRepository.findByUsername(username)
                     .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
             return User.builder()

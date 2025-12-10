@@ -1,15 +1,15 @@
 package com.project_3.studymart.repository;
 
-import com.project_3.studymart.entity.Order;
+import com.project_3.studymart.entity.BdhOrder;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface OrderRepository extends JpaRepository<Order, Long> {
+public interface BdhOrderRepository extends JpaRepository<BdhOrder, Long> {
 
     // lấy đơn theo customer
-    List<Order> findByCustomer_Id(Long customerId);
+    List<BdhOrder> findByCustomer_Id(Long customerId);
 
 }

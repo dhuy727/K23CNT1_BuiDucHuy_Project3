@@ -1,7 +1,7 @@
 package com.project_3.studymart.controller.admin;
 
-import com.project_3.studymart.entity.Category;
-import com.project_3.studymart.service.CategoryService;
+import com.project_3.studymart.entity.BdhCategory;
+import com.project_3.studymart.service.BdhCategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,27 +10,27 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/admin/categories")
 @RequiredArgsConstructor
-public class AdminCategoryController {
+public class BdhAdminCategoryController {
 
-    private final CategoryService service;
+    private final BdhCategoryService service;
 
     @GetMapping
-    public List<Category> getAll() {
+    public List<BdhCategory> getAll() {
         return service.getAll();
     }
 
     @GetMapping("/{id}")
-    public Category getById(@PathVariable Long id) {
+    public BdhCategory getById(@PathVariable Long id) {
         return service.getById(id);
     }
 
     @PostMapping
-    public Category create(@RequestBody Category category) {
+    public BdhCategory create(@RequestBody BdhCategory category) {
         return service.create(category);
     }
 
     @PutMapping("/{id}")
-    public Category update(@PathVariable Long id, @RequestBody Category category) {
+    public BdhCategory update(@PathVariable Long id, @RequestBody BdhCategory category) {
         return service.update(id, category);
     }
 
@@ -40,7 +40,7 @@ public class AdminCategoryController {
     }
 
     @GetMapping("/search")
-    public List<Category> search(@RequestParam String q) {
+    public List<BdhCategory> search(@RequestParam String q) {
         return service.searchByName(q);
     }
 }

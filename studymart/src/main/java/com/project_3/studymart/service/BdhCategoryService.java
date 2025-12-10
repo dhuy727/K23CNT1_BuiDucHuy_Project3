@@ -1,7 +1,7 @@
 package com.project_3.studymart.service;
 
-import com.project_3.studymart.entity.Category;
-import com.project_3.studymart.repository.CategoryRepository;
+import com.project_3.studymart.entity.BdhCategory;
+import com.project_3.studymart.repository.BdhCategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -9,20 +9,20 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class CategoryService {
+public class BdhCategoryService {
 
-    private final CategoryRepository repo;
+    private final BdhCategoryRepository repo;
 
-    public List<Category> getAll() {
+    public List<BdhCategory> getAll() {
         return repo.findAll();
     }
 
-    public Category getById(Long id) {
+    public BdhCategory getById(Long id) {
         return repo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Category not found"));
     }
 
-    public Category create(Category category) {
+    public BdhCategory create(BdhCategory category) {
         category.setId(null);
         if (category.getActive() == null) {
             category.setActive(true);
@@ -30,8 +30,8 @@ public class CategoryService {
         return repo.save(category);
     }
 
-    public Category update(Long id, Category category) {
-        Category old = getById(id);
+    public BdhCategory update(Long id, BdhCategory category) {
+        BdhCategory old = getById(id);
         old.setName(category.getName());
         old.setDescription(category.getDescription());
         if (category.getActive() != null) {
@@ -44,7 +44,7 @@ public class CategoryService {
         repo.deleteById(id);
     }
 
-    public List<Category> searchByName(String keyword) {
+    public List<BdhCategory> searchByName(String keyword) {
         return repo.findByNameContainingIgnoreCase(keyword);
     }
 }

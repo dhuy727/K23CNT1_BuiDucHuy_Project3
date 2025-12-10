@@ -1,9 +1,8 @@
 package com.project_3.studymart.service;
 
-import com.project_3.studymart.entity.Category;
-import com.project_3.studymart.entity.Product;
-import com.project_3.studymart.repository.ProductRepository;
-import com.project_3.studymart.service.CategoryService;
+import com.project_3.studymart.entity.BdhCategory;
+import com.project_3.studymart.entity.BdhProduct;
+import com.project_3.studymart.repository.BdhProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,29 +10,29 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ProductService {
+public class BdhProductService {
 
-    private final ProductRepository repo;
-    private final CategoryService categoryService;
+    private final BdhProductRepository repo;
+    private final BdhCategoryService categoryService;
 
-    public List<Product> getAll() {
+    public List<BdhProduct> getAll() {
         return repo.findAll();
     }
 
-    public List<Product> getAllActive() {
+    public List<BdhProduct> getAllActive() {
         return repo.findByActiveTrue();
     }
 
-    public Product getById(Long id) {
+    public BdhProduct getById(Long id) {
         return repo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
     }
 
     // tạo mới sản phẩm (nhận vào entity có category.id)
-    public Product create(Product product) {
+    public BdhProduct create(BdhProduct product) {
         // đảm bảo category tồn tại
         if (product.getCategory() != null && product.getCategory().getId() != null) {
-            Category cat = categoryService.getById(product.getCategory().getId());
+            BdhCategory cat = categoryService.getById(product.getCategory().getId());
             product.setCategory(cat);
         } else {
             throw new RuntimeException("Category is required");
@@ -46,8 +45,8 @@ public class ProductService {
         return repo.save(product);
     }
 
-    public Product update(Long id, Product product) {
-        Product old = getById(id);
+    public BdhProduct update(Long id, BdhProduct product) {
+        BdhProduct old = getById(id);
 
         old.setName(product.getName());
         old.setDescription(product.getDescription());
@@ -62,7 +61,7 @@ public class ProductService {
 
         // cập nhật lại category nếu gửi lên
         if (product.getCategory() != null && product.getCategory().getId() != null) {
-            Category cat = categoryService.getById(product.getCategory().getId());
+            BdhCategory cat = categoryService.getById(product.getCategory().getId());
             old.setCategory(cat);
         }
 
@@ -73,15 +72,15 @@ public class ProductService {
         repo.deleteById(id);
     }
 
-    public List<Product> searchByName(String keyword) {
+    public List<BdhProduct> searchByName(String keyword) {
         return repo.findByNameContainingIgnoreCase(keyword);
     }
 
-    public List<Product> findByCategory(Long categoryId) {
+    public List<BdhProduct> findByCategory(Long categoryId) {
         return repo.findByCategory_Id(categoryId);
     }
 
-    public List<Product> findByBrand(String brand) {
+    public List<BdhProduct> findByBrand(String brand) {
         return repo.findByBrandContainingIgnoreCase(brand);
     }
 }

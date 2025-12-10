@@ -1,15 +1,15 @@
 package com.project_3.studymart.repository;
 
-import com.project_3.studymart.entity.Customer;
+import com.project_3.studymart.entity.BdhCustomer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface CustomerRepository extends JpaRepository<Customer, Long> {
+public interface BdhCustomerRepository extends JpaRepository<BdhCustomer, Long> {
 
-    Optional<Customer> findByUsername(String username);
+    Optional<BdhCustomer> findByUsername(String username);
 
     boolean existsByUsername(String username);
 

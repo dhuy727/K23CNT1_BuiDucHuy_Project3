@@ -5,12 +5,12 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class CreateOrderRequest {
+public class BdhCreateOrderRequest {
 
     private String shippingAddress;
     private String phone;
     private String paymentMethod; // COD, MOMO,...
     private String note;
 
-    private List<CartItemRequest> items;
+    private List<BdhCartItemRequest> items;
 }

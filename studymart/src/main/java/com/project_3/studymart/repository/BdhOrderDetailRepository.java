@@ -1,9 +1,9 @@
 package com.project_3.studymart.repository;
 
-import com.project_3.studymart.entity.OrderDetail;
+import com.project_3.studymart.entity.BdhOrderDetail;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> {
+public interface BdhOrderDetailRepository extends JpaRepository<BdhOrderDetail, Long> {
 }

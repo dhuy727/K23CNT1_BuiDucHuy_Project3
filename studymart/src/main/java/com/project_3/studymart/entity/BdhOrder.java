@@ -9,7 +9,7 @@ import java.util.List;
 @Entity
 @Table(name = "orders")
 @Data
-public class Order {
+public class BdhOrder {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,7 +18,7 @@ public class Order {
     // Người đặt hàng
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
-    private Customer customer;
+    private BdhCustomer customer;
 
     // Thời gian đặt
     @Column(nullable = false)
@@ -46,5 +46,5 @@ public class Order {
 
     // Danh sách sản phẩm trong đơn
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderDetail> details;
+    private List<BdhOrderDetail> details;
 }
