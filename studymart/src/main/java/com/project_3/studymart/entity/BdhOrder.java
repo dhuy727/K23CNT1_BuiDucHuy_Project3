@@ -15,20 +15,16 @@ public class BdhOrder {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Người đặt hàng
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
     private BdhCustomer customer;
 
-    // Thời gian đặt
     @Column(nullable = false)
     private LocalDateTime orderDate;
 
-    // Tổng tiền
     @Column(nullable = false)
     private Double totalAmount;
 
-    // TRẠNG THÁI: PENDING, PROCESSING, SHIPPING, COMPLETED, CANCELED
     @Column(nullable = false, length = 20)
     private String status;
 
@@ -38,13 +34,25 @@ public class BdhOrder {
     @Column(nullable = false, length = 20)
     private String phone;
 
-    @Column(length = 100)
-    private String paymentMethod; // COD, MOMO, VNPAY...
-
     @Column(length = 255)
     private String note;
 
-    // Danh sách sản phẩm trong đơn
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<BdhOrderDetail> details;
+
+    @ManyToOne
+    @JoinColumn(name = "payment_method_id")
+    private BdhPaymentMethod paymentMethod;
+
+    @ManyToOne
+    @JoinColumn(name = "transport_method_id")
+    private BdhTransportMethod transportMethod;
+
+    @Column(name = "shipping_fee")
+    private Double shippingFee;
+
+    @Column(name = "total_price")
+    private Double totalPrice;
+
+
 }

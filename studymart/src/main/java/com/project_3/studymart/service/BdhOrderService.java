@@ -24,6 +24,9 @@ public class BdhOrderService {
     private final BdhOrderDetailRepository detailRepository;
     private final BdhCustomerService customerService;
     private final BdhProductService productService;
+    private final BdhPaymentMethodService paymentMethodService;
+    private final BdhTransportMethodService transportMethodService;
+
 
     /**
      * Tạo đơn hàng cho user (username lấy từ Authentication)
@@ -37,16 +40,23 @@ public class BdhOrderService {
             throw new RuntimeException("Order must have at least 1 item");
         }
 
+        // 1. Lấy phương thức thanh toán & vận chuyển theo ID
+        var paymentMethod = paymentMethodService.getById(req.getPaymentMethodId());
+        var transportMethod = transportMethodService.getById(req.getTransportMethodId());
+
         BdhOrder order = new BdhOrder();
         order.setCustomer(customer);
         order.setOrderDate(LocalDateTime.now());
         order.setStatus("PENDING");
         order.setShippingAddress(req.getShippingAddress());
         order.setPhone(req.getPhone());
-        order.setPaymentMethod(req.getPaymentMethod());
         order.setNote(req.getNote());
 
-        double total = 0.0;
+        // Gán method
+        order.setPaymentMethod(paymentMethod);
+        order.setTransportMethod(transportMethod);
+
+        double productTotal = 0.0;
         List<BdhOrderDetail> details = new ArrayList<>();
 
         for (BdhCartItemRequest itemReq : req.getItems()) {
@@ -65,7 +75,7 @@ public class BdhOrderService {
 
             double subtotal = product.getPrice() * itemReq.getQuantity();
             detail.setSubtotal(subtotal);
-            total += subtotal;
+            productTotal += subtotal;
 
             // trừ kho
             product.setQuantity(product.getQuantity() - itemReq.getQuantity());
@@ -74,7 +84,18 @@ public class BdhOrderService {
             details.add(detail);
         }
 
-        order.setTotalAmount(total);
+        // 2. Tính phí ship từ transportMethod
+        double shippingFee = transportMethod.getPrice() != null ? transportMethod.getPrice() : 0.0;
+
+        // 3. Tổng cuối cùng = tiền hàng + ship
+        double totalPrice = productTotal + shippingFee;
+
+        // totalAmount: tiền hàng
+        order.setTotalAmount(productTotal);
+
+        // shippingFee & totalPrice: đúng field mới bạn thêm
+        order.setShippingFee(shippingFee);
+        order.setTotalPrice(totalPrice);
 
         // lưu order
         BdhOrder savedOrder = orderRepository.save(order);
@@ -88,6 +109,7 @@ public class BdhOrderService {
         savedOrder.setDetails(details);
         return savedOrder;
     }
+
 
     /**
      * Lấy danh sách đơn của 1 khách hàng (dùng cho /api/orders/my)
