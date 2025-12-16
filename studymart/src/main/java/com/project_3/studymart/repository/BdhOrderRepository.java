@@ -9,6 +9,7 @@ import java.util.List;
 @Repository
 public interface BdhOrderRepository extends JpaRepository<BdhOrder, Long> {
 
-    List<BdhOrder> findByCustomer_Id(Long customerId);
+    List<BdhOrder> findByUser_Id(Long userId);
+    List<BdhOrder> findByUserIdOrderByOrderDateDesc(Long userId);
 
 }

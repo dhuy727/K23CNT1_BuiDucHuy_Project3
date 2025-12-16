@@ -16,8 +16,3 @@ public class BdhCreateOrderRequest {
     private List<BdhCartItemRequest> items;
 }
 
-@Data
-class OrderItemRequest {
-    private Long productId;
-    private int quantity;
-}

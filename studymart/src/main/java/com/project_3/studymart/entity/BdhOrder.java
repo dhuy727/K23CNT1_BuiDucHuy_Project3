@@ -16,8 +16,8 @@ public class BdhOrder {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id", nullable = false)
-    private BdhCustomer customer;
+    @JoinColumn(name = "users_id", nullable = false)
+    private BdhUser user;
 
     @Column(nullable = false)
     private LocalDateTime orderDate;

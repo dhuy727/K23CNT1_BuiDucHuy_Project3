@@ -1,20 +1,20 @@
 package com.project_3.studymart.service;
 
 import com.project_3.studymart.dto.BdhRegisterRequest;
-import com.project_3.studymart.entity.BdhCustomer;
-import com.project_3.studymart.repository.BdhCustomerRepository;
+import com.project_3.studymart.entity.BdhUser;
+import com.project_3.studymart.repository.BdhUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class BdhCustomerService {
+public class BdhUserService {
 
-    private final BdhCustomerRepository repo;
+    private final BdhUserRepository repo;
     private final PasswordEncoder passwordEncoder;
 
-    public BdhCustomer register(BdhRegisterRequest req) {
+    public BdhUser register(BdhRegisterRequest req) {
         if (repo.existsByUsername(req.getUsername())) {
             throw new RuntimeException("Username already exists");
         }
@@ -22,7 +22,7 @@ public class BdhCustomerService {
             throw new RuntimeException("Email already exists");
         }
 
-        BdhCustomer c = new BdhCustomer();
+        BdhUser c = new BdhUser();
         c.setUsername(req.getUsername());
         c.setPassword(passwordEncoder.encode(req.getPassword()));
         c.setFullName(req.getFullName());
@@ -35,7 +35,7 @@ public class BdhCustomerService {
         return repo.save(c);
     }
 
-    public BdhCustomer getByUsername(String username) {
+    public BdhUser getByUsername(String username) {
         return repo.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }

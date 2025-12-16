@@ -2,7 +2,7 @@ package com.project_3.studymart.service;
 
 import com.project_3.studymart.dto.BdhCartItemRequest;
 import com.project_3.studymart.dto.BdhCreateOrderRequest;
-import com.project_3.studymart.entity.BdhCustomer;
+import com.project_3.studymart.entity.BdhUser;
 import com.project_3.studymart.entity.BdhOrder;
 import com.project_3.studymart.entity.BdhOrderDetail;
 import com.project_3.studymart.entity.BdhProduct;
@@ -22,7 +22,7 @@ public class BdhOrderService {
 
     private final BdhOrderRepository orderRepository;
     private final BdhOrderDetailRepository detailRepository;
-    private final BdhCustomerService customerService;
+    private final BdhUserService customerService;
     private final BdhProductService productService;
     private final BdhPaymentMethodService paymentMethodService;
     private final BdhTransportMethodService transportMethodService;
@@ -34,25 +34,23 @@ public class BdhOrderService {
     @Transactional
     public BdhOrder createOrder(String username, BdhCreateOrderRequest req) {
 
-        BdhCustomer customer = customerService.getByUsername(username);
+        BdhUser user = customerService.getByUsername(username);
 
         if (req.getItems() == null || req.getItems().isEmpty()) {
             throw new RuntimeException("Order must have at least 1 item");
         }
 
-        // 1. Lấy phương thức thanh toán & vận chuyển theo ID
         var paymentMethod = paymentMethodService.getById(req.getPaymentMethodId());
         var transportMethod = transportMethodService.getById(req.getTransportMethodId());
 
         BdhOrder order = new BdhOrder();
-        order.setCustomer(customer);
+        order.setUser(user); // ✅ FIX
         order.setOrderDate(LocalDateTime.now());
         order.setStatus("PENDING");
         order.setShippingAddress(req.getShippingAddress());
         order.setPhone(req.getPhone());
         order.setNote(req.getNote());
 
-        // Gán method
         order.setPaymentMethod(paymentMethod);
         order.setTransportMethod(transportMethod);
 
@@ -60,7 +58,6 @@ public class BdhOrderService {
         List<BdhOrderDetail> details = new ArrayList<>();
 
         for (BdhCartItemRequest itemReq : req.getItems()) {
-
             BdhProduct product = productService.getById(itemReq.getProductId());
 
             if (product.getQuantity() < itemReq.getQuantity()) {
@@ -77,33 +74,22 @@ public class BdhOrderService {
             detail.setSubtotal(subtotal);
             productTotal += subtotal;
 
-            // trừ kho
             product.setQuantity(product.getQuantity() - itemReq.getQuantity());
             productService.update(product.getId(), product);
 
             details.add(detail);
         }
 
-        // 2. Tính phí ship từ transportMethod
         double shippingFee = transportMethod.getPrice() != null ? transportMethod.getPrice() : 0.0;
-
-        // 3. Tổng cuối cùng = tiền hàng + ship
         double totalPrice = productTotal + shippingFee;
 
-        // totalAmount: tiền hàng
         order.setTotalAmount(productTotal);
-
-        // shippingFee & totalPrice: đúng field mới bạn thêm
         order.setShippingFee(shippingFee);
         order.setTotalPrice(totalPrice);
 
-        // lưu order
         BdhOrder savedOrder = orderRepository.save(order);
 
-        // gán order cho từng detail rồi lưu
-        for (BdhOrderDetail d : details) {
-            d.setOrder(savedOrder);
-        }
+        for (BdhOrderDetail d : details) d.setOrder(savedOrder);
         detailRepository.saveAll(details);
 
         savedOrder.setDetails(details);
@@ -115,9 +101,10 @@ public class BdhOrderService {
      * Lấy danh sách đơn của 1 khách hàng (dùng cho /api/orders/my)
      */
     public List<BdhOrder> getOrdersOfCustomer(String username) {
-        BdhCustomer c = customerService.getByUsername(username);
-        return orderRepository.findByCustomer_Id(c.getId());
+        BdhUser u = customerService.getByUsername(username);
+        return orderRepository.findByUser_Id(u.getId());
     }
+
 
     /**
      * Lấy tất cả đơn (dùng cho admin)
