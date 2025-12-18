@@ -1,4 +1,4 @@
-package com.project_3.studymart.controller.api;
+package com.project_3.studymart.controller;
 
 import com.project_3.studymart.dto.BdhRegisterRequest;
 import com.project_3.studymart.entity.BdhUser;

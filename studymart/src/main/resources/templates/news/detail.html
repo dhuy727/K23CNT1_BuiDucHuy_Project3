@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${news.title})}"></head>
+<body>
+<div th:replace="~{fragments/layout :: navbar('news')}"></div>
+
+<div class="container my-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <h2 class="mb-3" th:text="${news.title}"></h2>
+
+            <div class="text-muted mb-3"
+                 th:text="${#temporals.format(news.createdAt, 'dd/MM/yyyy HH:mm')}"></div>
+
+            <img class="img-fluid rounded mb-4"
+                 th:src="@{${(news.imageUrl != null and !#strings.isEmpty(news.imageUrl))
+                           ? '/images/news/' + news.imageUrl
+                           : '/images/no-image.png'}}"
+                 alt="news">
+
+            <div th:utext="${news.content}" class="news-content"></div>
+
+            <a class="btn btn-outline-secondary mt-4" th:href="@{/news}">
+                ← Quay lại danh sách
+            </a>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>

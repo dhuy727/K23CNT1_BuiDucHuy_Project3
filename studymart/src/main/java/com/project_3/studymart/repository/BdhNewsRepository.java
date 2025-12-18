@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface BdhNewsRepository extends JpaRepository<BdhNews, Long> {
 
-    List<BdhNews> findByActiveTrueOrderByCreatedAtDesc();
+    List<BdhNews> findAllByOrderByCreatedAtDesc();
 
 }

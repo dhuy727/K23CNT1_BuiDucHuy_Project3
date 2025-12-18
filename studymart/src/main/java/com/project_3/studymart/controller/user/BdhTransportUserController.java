@@ -1,7 +1,7 @@
 package com.project_3.studymart.controller.user;
 
-import com.project_3.studymart.entity.BdhPaymentMethod;
-import com.project_3.studymart.service.BdhPaymentMethodService;
+import com.project_3.studymart.entity.BdhTransportMethod;
+import com.project_3.studymart.service.BdhTransportMethodService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,15 +10,15 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/payment-methods")
+@RequestMapping("/api/transport-methods")
 @RequiredArgsConstructor
+public class BdhTransportUserController {
 
-public class BdhPaymentClientController {
-
-    private final BdhPaymentMethodService service;
+    private final BdhTransportMethodService service;
 
     @GetMapping
-    public List<BdhPaymentMethod> getActive() {
+    public List<BdhTransportMethod> getActive() {
         return service.getActive();
     }
 }
+

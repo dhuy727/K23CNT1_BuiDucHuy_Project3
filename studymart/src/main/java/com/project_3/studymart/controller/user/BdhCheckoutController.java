@@ -37,25 +37,40 @@ public class BdhCheckoutController {
 
     @PostMapping("/checkout")
     public String checkoutSubmit(
-            BdhCheckoutRequest req,
+            @ModelAttribute BdhCheckoutRequest req,
             @RequestParam("cartJson") String cartJson,
             Principal principal,
             RedirectAttributes ra
-    ) throws Exception {
+    ) {
+        try {
+            if (principal == null) {
+                ra.addFlashAttribute("msg", "Vui lòng đăng nhập trước khi thanh toán!");
+                return "redirect:/login";
+            }
 
-        String username = principal.getName();
-        BdhUser user = userRepo.findByUsername(username).orElseThrow();
+            if (cartJson == null || cartJson.isBlank() || "[]".equals(cartJson.trim())) {
+                ra.addFlashAttribute("msg", "Giỏ hàng trống!");
+                return "redirect:/cart";
+            }
 
-        List<BdhCartItemRequest> cartItems = objectMapper.readValue(
-                cartJson,
-                new TypeReference<List<BdhCartItemRequest>>() {}
-        );
+            String username = principal.getName();
+            BdhUser user = userRepo.findByUsername(username)
+                    .orElseThrow(() -> new RuntimeException("User not found: " + username));
 
-        checkoutService.createOrder(user, req, cartItems);
+            List<BdhCartItemRequest> cartItems = objectMapper.readValue(
+                    cartJson,
+                    new TypeReference<List<BdhCartItemRequest>>() {}
+            );
 
-        ra.addFlashAttribute("justOrdered", true);
-        return "redirect:/my-orders";
+            checkoutService.createOrder(user, req, cartItems);
+
+            ra.addFlashAttribute("justOrdered", true);
+            return "redirect:/my-orders";
+
+        } catch (Exception ex) {
+            ra.addFlashAttribute("msg", "Đặt hàng thất bại: " + ex.getMessage());
+            return "redirect:/checkout";
+        }
     }
-
 
 }

@@ -45,14 +45,16 @@
                             th:text="${#numbers.formatDecimal(o.totalPrice != null ? o.totalPrice : o.totalAmount,0,'COMMA',0,'POINT')} + 'đ'">0đ</td>
 
                         <td class="text-center">
-              <span class="badge rounded-pill"
-                    th:classappend="
-                      ${o.status} == 'PENDING'  ? ' text-bg-warning' :
-                      (${o.status} == 'PAID'    ? ' text-bg-primary' :
-                      (${o.status} == 'SHIPPING'? ' text-bg-info' :
-                      (${o.status} == 'DONE'    ? ' text-bg-success' :
-                      (${o.status} == 'CANCEL'  ? ' text-bg-danger' : ' text-bg-secondary'))))"
-                    th:text="${o.status}">PENDING</span>
+              <span class="badge"
+                    th:classappend="${ 'text-bg-' + (o.status.name() == 'PENDING' ? 'warning' :
+                                      o.status.name() == 'PAID' ? 'primary' :
+                                      o.status.name() == 'SHIPPING' ? 'info' :
+                                      o.status.name() == 'DONE' ? 'success' :
+                                      o.status.name() == 'CANCEL' ? 'danger' : 'secondary') }"
+                    th:text="${o.status}">
+              </span>
+
+
                         </td>
 
                         <td class="text-end">

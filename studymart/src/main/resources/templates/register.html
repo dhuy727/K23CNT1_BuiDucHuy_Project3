@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
-<head>
+<head th:replace="~{fragments/layout :: head('StudyMart - Đăng nhập')}">
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>StudyMart - Đăng ký</title>
@@ -68,7 +68,7 @@
     </div>
 </div>
 
-<script th:src="@{/main.js}"></script>
+<script th:src="@{/js/main.js}"></script>
 <script>
     const REGISTER_ENDPOINT = "/api/auth/register";
 ;
@@ -97,6 +97,24 @@
         alert("Đăng ký thất bại: " + err.message);
       }
     });
+
+    async function api(url, options = {}) {
+      const res = await fetch(url, {
+        headers: { "Content-Type": "application/json", ...(options.headers || {}) },
+        ...options
+      });
+
+      // đọc body để lấy message lỗi
+      const text = await res.text();
+      let data = null;
+      try { data = text ? JSON.parse(text) : null; } catch (e) {}
+
+      if (!res.ok) {
+        const msg = (data && (data.message || data.error)) ? (data.message || data.error) : (text || res.statusText);
+        throw new Error(msg);
+      }
+      return data;
+    }
 </script>
 </body>
 </html>

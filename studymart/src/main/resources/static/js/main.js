@@ -1,135 +1,94 @@
 
-const API_BASE = "/api";
+const BDH_CART_KEY = "BDH_CART";
 
-async function api(path, options = {}) {
-  const res = await fetch(`${API_BASE}${path}`, {
-    headers: { "Content-Type": "application/json", ...(options.headers || {}) },
-    ...options,
-  });
-  const text = await res.text();
-  const data = text ? JSON.parse(text) : null;
-  if (!res.ok) throw new Error((data && data.message) || `HTTP ${res.status}`);
-  return data;
-}
-
-
-// key lưu cart
-const CART_KEY = "bdh_cart";
-
-// ========== CART HELPER ==========
-function loadCart() {
-    const data = localStorage.getItem(CART_KEY);
-    return data ? JSON.parse(data) : [];
+function getCart() {
+  try {
+    return JSON.parse(localStorage.getItem(BDH_CART_KEY)) || [];
+  } catch (e) {
+    return [];
+  }
 }
 
 function saveCart(cart) {
-    localStorage.setItem(CART_KEY, JSON.stringify(cart));
-    updateCartCount();
+  localStorage.setItem(BDH_CART_KEY, JSON.stringify(cart));
 }
 
-function addToCart(product) {
-    let cart = loadCart();
-    const existing = cart.find(i => i.productId === product.id);
+function addToCart(product, qty = 1) {
+  if (!product) return;
 
-    if (existing) {
-        existing.quantity += 1;
-    } else {
-        cart.push({
-            productId: product.id,
-            name: product.name,
-            price: product.price,
-            quantity: 1
-        });
-    }
-    saveCart(cart);
-}
+  const productId = Number(product.productId ?? product.id);
+  if (!productId) return;
 
-
-function updateCartCount() {
-    const el = document.getElementById("cart-count");
-    if (!el) return;
-    const cart = loadCart();
-    const count = cart.reduce((sum, item) => sum + item.quantity, 0);
-    el.textContent = count;
-}
-
-function getAuthHeader() {
-    const auth = localStorage.getItem("auth");
-    if (!auth) return {};
-    const { username, password } = JSON.parse(auth);
-    return {
-        "Authorization": "Basic " + btoa(username + ":" + password)
-    };
-}
-
-function logout() {
-    localStorage.removeItem("auth");
-    window.location.href = "login.html";
-}
-
-
-
-// ========== UTIL ==========
-function formatCurrency(v) {
-    return new Intl.NumberFormat("vi-VN", {
-        style: "currency",
-        currency: "VND"
-    }).format(v || 0);
-}
-
-function escapeHtml(str) {
-    return str
-        .replace(/&/g, "&amp;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#39;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
-}
-<div class="row" id="productList"></div>
-<script src="main.js"></script>
-<script>loadProducts();</script>
-
-async function loadProducts() {
-  const products = await api("/products");
-  const el = document.getElementById("productList");
-  el.innerHTML = products.map(p => `
-    <div class="col-md-3 mb-3">
-      <div class="card h-100">
-        <img src="${p.imageUrl || 'https://via.placeholder.com/400x250'}" class="card-img-top">
-        <div class="card-body">
-          <h6 class="card-title">${p.name}</h6>
-          <div class="fw-bold">${(p.price || 0).toLocaleString()}đ</div>
-          <button class="btn btn-sm btn-primary mt-2" onclick='onAddToCart(${JSON.stringify(p)})'>
-            Thêm vào giỏ
-          </button>
-        </div>
-      </div>
-    </div>
-  `).join("");
-}
-
-function onAddToCart(p) {
-    addToCart(p);
-    alert("Đã thêm vào giỏ hàng!");
-}
-
-document.addEventListener("DOMContentLoaded", () => {
   const cart = getCart();
-  renderSummary(cart);
+  const addQty = Number(qty) || 1;
 
-  const btn = document.getElementById("btnPlaceOrder");
-  if (!cart.length) btn.disabled = true;
+  const idx = cart.findIndex(i => Number(i.productId) === productId);
 
-  document.getElementById("checkoutForm").addEventListener("submit", (e) => {
-    const cartNow = getCart();
-    if (!cartNow.length) {
-      e.preventDefault();
-      alert("Giỏ hàng trống!");
-      return;
-    }
-    document.getElementById("cartJson").value = JSON.stringify(cartNow);
+  if (idx >= 0) {
+    cart[idx].quantity = (Number(cart[idx].quantity) || 0) + addQty;
+    if (!cart[idx].name && product.name) cart[idx].name = product.name;
+    if ((cart[idx].price == null || cart[idx].price === 0) && product.price != null) cart[idx].price = Number(product.price);
+    if (!cart[idx].imageUrl && product.imageUrl) cart[idx].imageUrl = product.imageUrl;
+  } else {
+    cart.push({
+      productId,
+      name: product.name || "",
+      price: Number(product.price || 0),
+      imageUrl: product.imageUrl || null,
+      quantity: addQty
+    });
+  }
+
+  saveCart(cart);
+  updateCartCount();
+}
+
+
+function getCartCount() {
+  return getCart().reduce((sum, i) => sum + (Number(i.quantity) || 0), 0);
+}
+
+function updateCartCount(){
+  const cart = getCart();
+  const total = cart.reduce((s, x) => s + Number(x.quantity || 0), 0);
+  const el = document.getElementById("cart-count");
+  if (el) el.textContent = total;
+}
+
+
+function clearCart() {
+  localStorage.removeItem(BDH_CART_KEY);
+  updateCartCount();
+}
+
+document.addEventListener("DOMContentLoaded", () => updateCartCount());
+
+function resolveImage(item){
+  const u = item.imageUrl;
+  if (!u) return "/images/no-image.png";
+
+  if (u.startsWith("http://") || u.startsWith("https://")) return u;
+
+  if (u.startsWith("/")) return u;
+
+  return "/images/products/" + u;
+}
+
+window.api = async function (url, options = {}) {
+  const res = await fetch(url, {
+    headers: { "Content-Type": "application/json", ...(options.headers || {}) },
+    ...options
   });
-});
 
+  const text = await res.text();
+  let data = null;
+  try { data = text ? JSON.parse(text) : null; } catch (e) {}
+
+  if (!res.ok) {
+    const msg = (data && (data.message || data.error)) ? (data.message || data.error) : (text || res.statusText);
+    throw new Error(msg);
+  }
+  return data;
+};
 
 

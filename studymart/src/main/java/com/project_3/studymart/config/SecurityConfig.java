@@ -20,9 +20,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/", "/login", "/register",
+                                "/api/auth/**",
+                                "/error",
+                                "/products", "/products/**",
+                                "/news", "/news/**",
                                 "/css/**", "/js/**", "/images/**",
                                 "/assets/**", "/webjars/**",
-                                "/products/**", "/news/**",
                                 "/main.js"
                         ).permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
@@ -41,7 +44,7 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // Demo nhanh: password lưu plain text trong DB
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return org.springframework.security.crypto.password.NoOpPasswordEncoder.getInstance();

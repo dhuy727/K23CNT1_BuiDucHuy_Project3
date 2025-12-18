@@ -30,8 +30,6 @@ public class BdhNews {
 
     String imageUrl;
 
-    Boolean active = true;
-
     @Column(updatable = false)
     LocalDateTime createdAt;
 
@@ -41,7 +39,6 @@ public class BdhNews {
     public void prePersist() {
         createdAt = LocalDateTime.now();
         updatedAt = createdAt;
-        if (active == null) active = true;
     }
 
     @PreUpdate
@@ -49,3 +46,4 @@ public class BdhNews {
         updatedAt = LocalDateTime.now();
     }
 }
+

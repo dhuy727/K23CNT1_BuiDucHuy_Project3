@@ -1,5 +1,6 @@
 package com.project_3.studymart.entity;
 
+import com.project_3.studymart.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -9,6 +10,7 @@ import java.util.List;
 @Entity
 @Table(name = "orders")
 @Data
+
 public class BdhOrder {
 
     @Id
@@ -25,8 +27,9 @@ public class BdhOrder {
     @Column(nullable = false)
     private Double totalAmount;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private String status;
+    private OrderStatus status;
 
     @Column(nullable = false, length = 255)
     private String shippingAddress;
@@ -37,8 +40,20 @@ public class BdhOrder {
     @Column(length = 255)
     private String note;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BdhOrderDetail> details;
+
+    public void setDetails(List<BdhOrderDetail> details) {
+        this.details = details;
+        if (details != null) {
+            details.forEach(d -> d.setOrder(this));
+        }
+    }
+
+    public void addDetail(BdhOrderDetail d) {
+        this.details.add(d);
+        d.setOrder(this);
+    }
 
     @ManyToOne
     @JoinColumn(name = "payment_method_id")

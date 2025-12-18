@@ -23,13 +23,13 @@
 
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="fw-semibold">Đơn #<span th:text="${order.id}"></span></div>
-                            <span class="badge rounded-pill"
-                                  th:classappend="
-                      ${order.status} == 'PENDING'  ? ' text-bg-warning' :
-                      (${order.status} == 'PAID'    ? ' text-bg-primary' :
-                      (${order.status} == 'SHIPPING'? ' text-bg-info' :
-                      (${order.status} == 'DONE'    ? ' text-bg-success' :
-                      (${order.status} == 'CANCEL'  ? ' text-bg-danger' : ' text-bg-secondary'))))"
+                            <span class="badge"
+                                  th:classappend="${ order.status == T(com.project_3.studymart.enums.OrderStatus).PENDING  ? ' text-bg-warning' :
+                                   order.status == T(com.project_3.studymart.enums.OrderStatus).PAID     ? ' text-bg-primary' :
+                                   order.status == T(com.project_3.studymart.enums.OrderStatus).SHIPPING ? ' text-bg-info' :
+                                   order.status == T(com.project_3.studymart.enums.OrderStatus).DONE     ? ' text-bg-success' :
+                                   order.status == T(com.project_3.studymart.enums.OrderStatus).CANCEL   ? ' text-bg-danger' :
+                                   ' text-bg-secondary' }"
                                   th:text="${order.status}">PENDING</span>
                         </div>
 
@@ -77,11 +77,11 @@
 
                         <form th:action="@{/admin/orders/{id}/status(id=${order.id})}" method="post" class="d-flex gap-2">
                             <select class="form-select" name="status">
-                                <option th:selected="${order.status == 'PENDING'}" value="PENDING">PENDING</option>
-                                <option th:selected="${order.status == 'PAID'}" value="PAID">PAID</option>
-                                <option th:selected="${order.status == 'SHIPPING'}" value="SHIPPING">SHIPPING</option>
-                                <option th:selected="${order.status == 'DONE'}" value="DONE">DONE</option>
-                                <option th:selected="${order.status == 'CANCEL'}" value="CANCEL">CANCEL</option>
+                                <option th:each="s : ${allowedStatuses}"
+                                        th:value="${s}"
+                                        th:selected="${s == order.status}"
+                                        th:text="${s}">
+                                </option>
                             </select>
                             <button class="btn btn-primary" type="submit">Cập nhật</button>
                         </form>

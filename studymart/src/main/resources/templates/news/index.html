@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Tin tức')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: navbar('news')}"></div>
+
+<div class="container my-4">
+    <h4 class="mb-3">Tin tức mới nhất</h4>
+
+    <div class="row g-3">
+        <div class="col-12 col-md-6 col-lg-4" th:each="n : ${newsList}">
+            <div class="card h-100 border-0 shadow-sm overflow-hidden">
+                <div class="ratio ratio-16x9 bg-white">
+                    <img class="w-100 h-100 img-cover"
+                         th:src="@{${(n.imageUrl != null and !#strings.isEmpty(n.imageUrl))
+                                   ? '/images/news/' + n.imageUrl
+                                   : '/images/no-image.png'}}"
+                         alt="news">
+                </div>
+
+                <div class="card-body">
+                    <h6 class="mb-2 line-clamp-2" th:text="${n.title}"></h6>
+                    <p class="text-muted small line-clamp-3" th:text="${n.summary}"></p>
+                </div>
+
+                <div class="card-footer bg-white border-0">
+                    <a class="btn btn-outline-primary w-100"
+                       th:href="@{/news/{id}(id=${n.id})}">
+                        Đọc thêm
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>

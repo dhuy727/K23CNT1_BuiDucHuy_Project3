@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/admin-layout :: adminHead('Admin - Tạo Admin')}"></head>
+<body>
+
+<div th:replace="~{fragments/admin-layout :: adminTopbar}"></div>
+
+<div th:with="pageTitle=${pageTitle}, pageSubtitle=${pageSubtitle}"
+     th:replace="~{fragments/admin-layout :: adminShell('create-admin')}">
+
+    <div th:fragment="adminContent">
+
+        <div th:if="${param.ok}" class="alert alert-success">
+            ✅ Tạo tài khoản admin thành công!
+        </div>
+
+        <div th:if="${err}" class="alert alert-danger" th:text="${err}"></div>
+
+        <div class="card shadow-soft border-0">
+            <div class="card-body p-4">
+                <form th:action="@{/admin/create-admin}" method="post" th:object="${form}">
+                <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Họ tên</label>
+                            <input class="form-control" th:field="*{fullName}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">SĐT</label>
+                            <input class="form-control" th:field="*{phone}">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Username</label>
+                            <input class="form-control" th:field="*{username}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Email</label>
+                            <input class="form-control" type="email" th:field="*{email}" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Password</label>
+                            <input class="form-control" type="password" th:field="*{password}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Địa chỉ</label>
+                            <input class="form-control" th:field="*{address}">
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary w-100 mt-4" type="submit">
+                        Tạo tài khoản Admin
+                    </button>
+
+                    <div class="mt-3 small text-muted">
+                        Tài khoản được tạo sẽ có quyền <b>ADMIN</b> và có thể truy cập toàn bộ /admin/**.
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div th:replace="~{fragments/admin-layout :: adminScripts}"></div>
+</body>
+</html>

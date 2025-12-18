@@ -18,7 +18,7 @@ public class BdhNewsService {
     }
 
     public List<BdhNews> getActiveNews() {
-        return newsRepository.findByActiveTrueOrderByCreatedAtDesc();
+        return newsRepository.findAllByOrderByCreatedAtDesc();
     }
 
     public BdhNews getById(Long id) {
@@ -37,7 +37,6 @@ public class BdhNewsService {
         existing.setSummary(news.getSummary());
         existing.setContent(news.getContent());
         existing.setImageUrl(news.getImageUrl());
-        existing.setActive(news.getActive());
         return newsRepository.save(existing);
     }
 

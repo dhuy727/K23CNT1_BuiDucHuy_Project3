@@ -4,6 +4,7 @@ import com.project_3.studymart.entity.BdhCategory;
 import com.project_3.studymart.entity.BdhProduct;
 import com.project_3.studymart.repository.BdhProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,7 +29,6 @@ public class BdhProductService {
                 .orElseThrow(() -> new RuntimeException("Product not found"));
     }
 
-    // tạo mới sản phẩm (nhận vào entity có category.id)
     public BdhProduct create(BdhProduct product) {
         if (product.getCategory() != null && product.getCategory().getId() != null) {
             BdhCategory cat = categoryService.getById(product.getCategory().getId());
@@ -81,5 +81,18 @@ public class BdhProductService {
 
     public List<BdhProduct> findByBrand(String brand) {
         return repo.findByBrandContainingIgnoreCase(brand);
+    }
+
+    public Page<BdhProduct> searchProducts(String q, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
+
+        if (q == null || q.trim().isEmpty()) {
+            return repo.findAll(pageable);
+        }
+
+        String kw = q.trim();
+        return repo.findByNameContainingIgnoreCaseOrBrandContainingIgnoreCase(
+                kw, kw, pageable
+        );
     }
 }

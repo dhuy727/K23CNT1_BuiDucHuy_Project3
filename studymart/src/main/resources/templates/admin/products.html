@@ -38,8 +38,11 @@
                         <td th:text="${p.id}">1</td>
 
                         <td>
-                            <img th:src="${p.imageUrl != null and !#strings.isEmpty(p.imageUrl)} ? ${p.imageUrl} : 'https://via.placeholder.com/80x60?text=No+Img'"
+                            <img th:src="${(p.imageUrl != null and !#strings.isEmpty(p.imageUrl))
+                                  ? '/images/products/' + p.imageUrl
+                                  : 'https://via.placeholder.com/80x60?text=No+Img'}"
                                  style="width:80px;height:60px;object-fit:cover;border-radius:8px;border:1px solid #eee;" />
+
                         </td>
 
                         <td>

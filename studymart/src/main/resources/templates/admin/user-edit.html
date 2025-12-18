@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/admin-layout :: adminHead('Admin - Sửa tài khoản')}"></head>
+<body>
+
+<div th:replace="~{fragments/admin-layout :: adminTopbar}"></div>
+
+<div th:with="pageTitle=${pageTitle}, pageSubtitle=${pageSubtitle}"
+     th:replace="~{fragments/admin-layout :: adminShell('users')}">
+
+    <div th:fragment="adminContent">
+
+        <div th:if="${err}" class="alert alert-danger" th:text="${err}"></div>
+
+        <div class="card shadow-soft border-0">
+            <div class="card-body p-4">
+
+                <div class="mb-3">
+                    <div class="small text-muted">Username</div>
+                    <div class="fw-semibold" th:text="${username}">username</div>
+                </div>
+
+                <form th:action="@{'/admin/users/' + ${userId} + '/edit'}" method="post" th:object="${form}" id="editForm">
+                    <div class="row g-3">
+
+                        <div class="col-md-6">
+                            <label class="form-label">Họ tên</label>
+                            <input class="form-control" th:field="*{fullName}" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">SĐT</label>
+                            <input class="form-control" th:field="*{phone}">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Email</label>
+                            <input class="form-control" type="email" th:field="*{email}" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Địa chỉ</label>
+                            <input class="form-control" th:field="*{address}">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Password mới (nếu muốn đổi)</label>
+                            <input class="form-control" type="password" th:field="*{password}" id="newPassword" placeholder="Để trống nếu không đổi">
+                            <div class="form-text">Nếu nhập password mới, hệ thống sẽ encode và cập nhật.</div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Nhập lại Password mới</label>
+                            <input class="form-control" type="password" id="confirmNewPassword" placeholder="Chỉ cần nếu bạn nhập password mới">
+                        </div>
+
+                    </div>
+
+                    <div class="d-flex gap-2 mt-4">
+                        <button class="btn btn-primary" type="submit">Lưu thay đổi</button>
+                        <a class="btn btn-outline-secondary" th:href="@{/admin/users}">Quay lại</a>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div th:replace="~{fragments/admin-layout :: adminScripts}"></div>
+
+<script>
+    document.getElementById('editForm').addEventListener('submit', function (e) {
+        const p = document.getElementById('newPassword').value;
+        const c = document.getElementById('confirmNewPassword').value;
+        if (p && p !== c) {
+            e.preventDefault();
+            alert('Mật khẩu mới nhập lại không khớp!');
+        }
+    });
+</script>
+
+</body>
+</html>

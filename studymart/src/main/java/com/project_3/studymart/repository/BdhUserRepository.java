@@ -3,6 +3,8 @@ package com.project_3.studymart.repository;
 import com.project_3.studymart.entity.BdhUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
@@ -14,4 +16,8 @@ public interface BdhUserRepository extends JpaRepository<BdhUser, Long> {
     boolean existsByUsername(String username);
 
     boolean existsByEmail(String email);
+
+    Page<BdhUser> findByUsernameContainingIgnoreCaseOrFullNameContainingIgnoreCaseOrEmailContainingIgnoreCase(
+            String username, String fullName, String email, Pageable pageable
+    );
 }

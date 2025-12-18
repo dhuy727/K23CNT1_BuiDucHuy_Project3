@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/admin-layout :: adminHead('Admin - Dashboard')}"></head>
+<body>
+<div th:replace="~{fragments/admin-layout :: adminTopbar}"></div>
+
+<div th:with="pageTitle=${pageTitle}, pageSubtitle=${pageSubtitle}"
+     th:replace="~{fragments/admin-layout :: adminShell('dashboard')}">
+
+    <div th:fragment="adminContent">
+
+        <div class="row g-3 mb-3">
+            <div class="col-12 col-lg-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="text-muted small">Tổng đơn hàng</div>
+                        <div class="fs-3 fw-semibold" th:text="${totalOrders}">0</div>
+                        <div class="small text-muted">Tất cả trạng thái</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="text-muted small">Đơn chờ xử lý</div>
+                        <div class="fs-3 fw-semibold" th:text="${pendingOrders}">0</div>
+                        <div class="small text-muted">Trạng thái PENDING</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="text-muted small">Doanh thu (tạm tính)</div>
+                        <div class="fs-3 fw-semibold"
+                             th:text="${#numbers.formatDecimal(revenue != null ? revenue : 0,0,'COMMA',0,'POINT')} + 'đ'">0đ</div>
+                        <div class="small text-muted">Tổng totalPrice/totalAmount</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div class="fw-semibold">5 đơn mới nhất</div>
+                    <a class="btn btn-sm btn-outline-primary" th:href="@{/admin/orders}">Xem tất cả</a>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table align-middle mb-0">
+                        <thead class="table-light">
+                        <tr>
+                            <th style="width:90px;">Mã</th>
+                            <th>Khách</th>
+                            <th style="width:170px;">Ngày</th>
+                            <th class="text-end" style="width:170px;">Tổng</th>
+                            <th class="text-center" style="width:130px;">Status</th>
+                            <th class="text-end" style="width:140px;">Thao tác</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:if="${#lists.isEmpty(latestOrders)}">
+                            <td colspan="6" class="text-center text-muted py-4">Chưa có đơn hàng.</td>
+                        </tr>
+
+                        <tr th:each="o : ${latestOrders}">
+                            <td class="fw-semibold">#<span th:text="${o.id}"></span></td>
+
+                            <td>
+                                <div class="fw-semibold" th:text="${o.user != null ? o.user.fullName : 'User'}"></div>
+                                <div class="text-muted small" th:text="${o.user != null ? o.user.username : ''}"></div>
+                            </td>
+
+                            <td class="small text-muted"
+                                th:text="${o.orderDate != null ? #temporals.format(o.orderDate, 'dd/MM/yyyy HH:mm') : '-'}"></td>
+
+                            <td class="text-end"
+                                th:text="${#numbers.formatDecimal(o.totalPrice != null ? o.totalPrice : o.totalAmount,0,'COMMA',0,'POINT')} + 'đ'"></td>
+
+                            <td class="text-center">
+                <span class="badge rounded-pill"
+                      th:classappend="${
+                              o.status == T(com.project_3.studymart.enums.OrderStatus).PENDING  ? ' text-bg-warning' :
+                              o.status == T(com.project_3.studymart.enums.OrderStatus).PAID     ? ' text-bg-primary' :
+                              o.status == T(com.project_3.studymart.enums.OrderStatus).SHIPPING ? ' text-bg-info' :
+                              o.status == T(com.project_3.studymart.enums.OrderStatus).DONE     ? ' text-bg-success' :
+                              o.status == T(com.project_3.studymart.enums.OrderStatus).CANCEL   ? ' text-bg-danger' :
+                              ' text-bg-secondary'
+                            }"
+                      th:text="${o.status}">PENDING</span>
+                            </td>
+
+                            <td class="text-end">
+                                <a class="btn btn-sm btn-outline-primary"
+                                   th:href="@{/admin/orders/{id}(id=${o.id})}">Xem</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div th:replace="~{fragments/admin-layout :: adminFooter}"></div>
+<div th:replace="~{fragments/admin-layout :: adminScripts}"></div>
+</body>
+</html>

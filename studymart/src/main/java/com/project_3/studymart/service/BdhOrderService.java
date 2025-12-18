@@ -6,6 +6,7 @@ import com.project_3.studymart.entity.BdhUser;
 import com.project_3.studymart.entity.BdhOrder;
 import com.project_3.studymart.entity.BdhOrderDetail;
 import com.project_3.studymart.entity.BdhProduct;
+import com.project_3.studymart.enums.OrderStatus;
 import com.project_3.studymart.repository.BdhOrderDetailRepository;
 import com.project_3.studymart.repository.BdhOrderRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,10 +28,6 @@ public class BdhOrderService {
     private final BdhPaymentMethodService paymentMethodService;
     private final BdhTransportMethodService transportMethodService;
 
-
-    /**
-     * Tạo đơn hàng cho user (username lấy từ Authentication)
-     */
     @Transactional
     public BdhOrder createOrder(String username, BdhCreateOrderRequest req) {
 
@@ -44,13 +41,12 @@ public class BdhOrderService {
         var transportMethod = transportMethodService.getById(req.getTransportMethodId());
 
         BdhOrder order = new BdhOrder();
-        order.setUser(user); // ✅ FIX
+        order.setUser(user);
         order.setOrderDate(LocalDateTime.now());
-        order.setStatus("PENDING");
+        order.setStatus(OrderStatus.PENDING);
         order.setShippingAddress(req.getShippingAddress());
         order.setPhone(req.getPhone());
         order.setNote(req.getNote());
-
         order.setPaymentMethod(paymentMethod);
         order.setTransportMethod(transportMethod);
 
@@ -80,12 +76,13 @@ public class BdhOrderService {
             details.add(detail);
         }
 
-        double shippingFee = transportMethod.getPrice() != null ? transportMethod.getPrice() : 0.0;
-        double totalPrice = productTotal + shippingFee;
+        double shippingFee = (transportMethod != null && transportMethod.getPrice() != null)
+                ? transportMethod.getPrice()
+                : 0.0;
 
         order.setTotalAmount(productTotal);
         order.setShippingFee(shippingFee);
-        order.setTotalPrice(totalPrice);
+        order.setTotalPrice(productTotal + shippingFee);
 
         BdhOrder savedOrder = orderRepository.save(order);
 
@@ -96,37 +93,44 @@ public class BdhOrderService {
         return savedOrder;
     }
 
-
-    /**
-     * Lấy danh sách đơn của 1 khách hàng (dùng cho /api/orders/my)
-     */
     public List<BdhOrder> getOrdersOfCustomer(String username) {
         BdhUser u = customerService.getByUsername(username);
         return orderRepository.findByUser_Id(u.getId());
     }
 
-
-    /**
-     * Lấy tất cả đơn (dùng cho admin)
-     */
     public List<BdhOrder> getAllOrders() {
         return orderRepository.findAll();
     }
 
-    /**
-     * Lấy 1 đơn theo id (admin)
-     */
     public BdhOrder getById(Long id) {
         return orderRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
     }
 
-    /**
-     * Cập nhật trạng thái đơn (admin)
-     */
+    @Transactional
     public BdhOrder updateStatus(Long id, String status) {
+        BdhOrder order = getById(id);
+
+        if (status == null || status.isBlank()) {
+            throw new IllegalArgumentException("Status is required");
+        }
+
+        OrderStatus newStatus;
+        try {
+            newStatus = OrderStatus.valueOf(status.trim().toUpperCase());
+        } catch (IllegalArgumentException ex) {
+            throw new IllegalArgumentException("Invalid status: " + status);
+        }
+
+        order.setStatus(OrderStatus.valueOf(status.toUpperCase()));
+        return orderRepository.save(order);
+    }
+
+    @Transactional
+    public BdhOrder updateStatus(Long id, OrderStatus status) {
         BdhOrder order = getById(id);
         order.setStatus(status);
         return orderRepository.save(order);
     }
 }
+

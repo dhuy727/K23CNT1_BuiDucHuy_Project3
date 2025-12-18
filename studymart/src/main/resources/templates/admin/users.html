@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/admin-layout :: adminHead('Admin - Users')}"></head>
+<body>
+
+<div th:replace="~{fragments/admin-layout :: adminTopbar}"></div>
+
+<div th:with="pageTitle=${pageTitle}, pageSubtitle=${pageSubtitle}"
+     th:replace="~{fragments/admin-layout :: adminShell('users')}">
+
+    <div th:fragment="adminContent">
+
+        <div class="card shadow-soft border-0 mb-3">
+            <div class="card-body">
+                <form class="row g-2 align-items-center" th:action="@{/admin/users}" method="get">
+                    <div class="col-md-8">
+                        <input class="form-control" name="q" th:value="${q}"
+                               placeholder="Tìm theo username / họ tên / email...">
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-dark w-100" type="submit">Tìm</button>
+                    </div>
+                    <div class="col-md-2">
+                        <a class="btn btn-primary w-100" th:href="@{/admin/users/create}">+ User</a>
+                    </div>
+                    <div class="col-md-2">
+                        <a class="btn btn-outline-secondary w-100" th:href="@{/admin/users}">Reset</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card shadow-soft border-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                    <tr>
+                        <th style="width:80px;">ID</th>
+                        <th>Username</th>
+                        <th>Họ tên</th>
+                        <th>Email</th>
+                        <th style="width:150px;">Trạng thái</th>
+                        <th style="width:180px;">Quyền</th>
+                        <th class="text-end" style="width:240px;">Hành động</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="u : ${p.content}">
+                        <td th:text="${u.id}">1</td>
+                        <td class="fw-semibold" th:text="${u.username}">admin</td>
+                        <td th:text="${u.fullName}">Name</td>
+                        <td th:text="${u.email}">mail</td>
+
+                        <td>
+                            <span th:if="${u.active}" class="badge text-bg-success">ACTIVE</span>
+                            <span th:unless="${u.active}" class="badge text-bg-secondary">LOCKED</span>
+                        </td>
+
+                        <td>
+                            <form th:action="@{'/admin/users/' + ${u.id} + '/role'}" method="post" class="d-flex gap-2">
+                                <input type="hidden" name="q" th:value="${q}">
+                                <input type="hidden" name="page" th:value="${p.number}">
+                                <select class="form-select form-select-sm" name="role">
+                                    <option value="ROLE_USER" th:selected="${u.role=='ROLE_USER' or u.role=='USER'}">ROLE_USER</option>
+                                    <option value="ROLE_ADMIN" th:selected="${u.role=='ROLE_ADMIN' or u.role=='ADMIN'}">ROLE_ADMIN</option>
+                                </select>
+                                <button class="btn btn-sm btn-outline-primary" type="submit">Lưu</button>
+                            </form>
+                        </td>
+
+                        <td class="text-end">
+                            <form th:if="${u.active}"
+                                  th:action="@{'/admin/users/' + ${u.id} + '/active'}"
+                                  method="post" class="d-inline">
+                                <input type="hidden" name="q" th:value="${q}">
+                                <input type="hidden" name="page" th:value="${p.number}">
+                                <input type="hidden" name="active" value="false">
+                                <button class="btn btn-sm btn-outline-danger" type="submit">Khóa</button>
+                            </form>
+
+                            <form th:unless="${u.active}"
+                                  th:action="@{'/admin/users/' + ${u.id} + '/active'}"
+                                  method="post" class="d-inline">
+                                <input type="hidden" name="q" th:value="${q}">
+                                <input type="hidden" name="page" th:value="${p.number}">
+                                <input type="hidden" name="active" value="true">
+                                <button class="btn btn-sm btn-success" type="submit">Mở</button>
+                            </form>
+
+                            <a class="btn btn-sm btn-outline-secondary"
+                               th:href="@{/admin/users/create-admin}">
+                                + Admin
+                            </a>
+                            <a class="btn btn-sm btn-outline-primary"
+                               th:href="@{'/admin/users/' + ${u.id} + '/edit'}">
+                                Sửa
+                            </a>
+                            <form th:action="@{'/admin/users/' + ${u.id} + '/delete'}"
+                                  method="post" class="d-inline"
+                                  onsubmit="return confirm('XÓA HẲN tài khoản này khỏi DB? Hành động không thể hoàn tác!');">
+                                <input type="hidden" name="q" th:value="${q}">
+                                <input type="hidden" name="page" th:value="${p.number}">
+                                <button class="btn btn-sm btn-outline-danger" type="submit">Xóa</button>
+                            </form>
+                        </td>
+                    </tr>
+
+                    <tr th:if="${p.totalElements == 0}">
+                        <td colspan="7" class="text-center text-muted py-4">Không có tài khoản nào</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div class="small text-muted">
+                    Tổng: <b th:text="${p.totalElements}">0</b>
+                </div>
+
+                <nav>
+                    <ul class="pagination pagination-sm mb-0">
+                        <li class="page-item" th:classappend="${p.first} ? 'disabled' : ''">
+                            <a class="page-link"
+                               th:href="@{/admin/users(q=${q}, page=${p.number-1}, size=${p.size})}">Trước</a>
+                        </li>
+                        <li class="page-item disabled">
+              <span class="page-link">
+                Trang <b th:text="${p.number + 1}">1</b>/<span th:text="${p.totalPages==0?1:p.totalPages}">1</span>
+              </span>
+                        </li>
+                        <li class="page-item" th:classappend="${p.last} ? 'disabled' : ''">
+                            <a class="page-link"
+                               th:href="@{/admin/users(q=${q}, page=${p.number+1}, size=${p.size})}">Sau</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div th:replace="~{fragments/admin-layout :: adminScripts}"></div>
+</body>
+</html>
