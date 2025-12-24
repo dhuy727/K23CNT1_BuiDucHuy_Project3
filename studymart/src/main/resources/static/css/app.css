@@ -1,0 +1,194 @@
+
+:root {
+  --sm-primary: #0d6efd;
+  --sm-primary-soft: #e7f0ff;
+  --sm-dark: #111827;
+  --sm-muted: #6b7280;
+  --sm-bg: #f5f5f7;
+  --sm-card-radius: 16px;
+  --sm-transition-fast: 0.2s ease;
+  --sm-transition: 0.25s ease;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Arial, sans-serif;
+  background-color: var(--sm-bg);
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.navbar-brand {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.navbar-brand img {
+  height: 60px;
+  width: auto;
+  object-fit: contain;
+}
+
+#cart-count {
+  font-weight: 600;
+}
+
+.card {
+  border-radius: var(--sm-card-radius);
+}
+
+.shadow-soft {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .06);
+}
+
+.product-card {
+  border-radius: var(--sm-card-radius);
+  transition: transform var(--sm-transition), box-shadow var(--sm-transition);
+  background-color: #ffffff;
+}
+
+.product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, .12);
+}
+
+.product-card img {
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+
+.product-card:hover img {
+  transform: scale(1.05);
+}
+
+.product-card h6 {
+  transition: color var(--sm-transition-fast);
+}
+
+.product-card:hover h6 {
+  color: var(--sm-primary);
+}
+
+.product-card .btn {
+  opacity: .95;
+  transition: opacity var(--sm-transition-fast), transform var(--sm-transition-fast), box-shadow var(--sm-transition-fast);
+}
+
+.product-card:hover .btn {
+  opacity: 1;
+  transform: translateY(-2px);
+}
+
+.img-cover {
+  object-fit: cover;
+}
+
+.news-img-item {
+  display: block;
+  height: 180px;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  background-color: #ffffff;
+}
+
+.news-img-item img {
+  width: 100%;
+  height: 100%;
+  transition: transform 0.35s ease;
+}
+
+.news-img-item:hover img {
+  transform: scale(1.06);
+}
+
+.news-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, .65), transparent);
+  display: flex;
+  align-items: flex-end;
+  padding: 10px 12px;
+}
+
+.news-overlay span {
+  color: #fff;
+  font-size: .9rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.hero-section {
+  border-radius: 24px;
+  background: radial-gradient(circle at top left, #e0f2fe, #eff6ff);
+}
+
+.admin-shell {
+  min-height: 100vh;
+}
+
+.admin-sidebar {
+  width: 260px;
+}
+
+@media (max-width: 992px) {
+  .admin-sidebar {
+    width: 100%;
+  }
+}
+
+.admin-sidebar .list-group-item.active {
+  background-color: var(--sm-primary);
+  border-color: var(--sm-primary);
+  color: #fff;
+  font-weight: 600;
+}
+
+.btn {
+  border-radius: 12px;
+}
+
+.btn-primary {
+  background-color: var(--sm-primary);
+  border-color: var(--sm-primary);
+}
+
+.btn-primary:hover {
+  background-color: #0b5ed7;
+  border-color: #0a58ca;
+}
+
+.toast-container {
+  z-index: 1080;
+}
+
+.toast.text-bg-success {
+  background-color: #16a34a !important;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #f9fafb;
+}

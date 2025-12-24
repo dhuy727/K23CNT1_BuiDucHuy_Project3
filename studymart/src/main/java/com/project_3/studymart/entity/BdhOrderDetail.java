@@ -12,12 +12,10 @@ public class BdhOrderDetail {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Thuộc về Order nào
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
     private BdhOrder order;
 
-    // Sản phẩm nào
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
     private BdhProduct product;

@@ -91,4 +91,28 @@ window.api = async function (url, options = {}) {
   return data;
 };
 
+    function addFromButton(btn) {
+  const product = {
+    productId: Number(btn.dataset.id),
+    name: btn.dataset.name,
+    price: Number(btn.dataset.price),
+    imageUrl: btn.dataset.image || null
+  };
+
+  addToCart(product, 1);
+
+  if (typeof showAddCartToast === "function") {
+    showAddCartToast();
+  }
+}
+
+function showAddCartToast() {
+  const el = document.getElementById("cartToast");
+  if (!el) return;
+  const toast = bootstrap.Toast.getOrCreateInstance(el, { delay: 2000 });
+  toast.hide();
+  toast.show();
+}
+
+
 

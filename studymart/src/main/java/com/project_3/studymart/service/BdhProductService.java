@@ -58,7 +58,6 @@ public class BdhProductService {
             old.setActive(product.getActive());
         }
 
-        // cập nhật lại category nếu gửi lên
         if (product.getCategory() != null && product.getCategory().getId() != null) {
             BdhCategory cat = categoryService.getById(product.getCategory().getId());
             old.setCategory(cat);
@@ -95,4 +94,8 @@ public class BdhProductService {
                 kw, kw, pageable
         );
     }
+    public List<BdhProduct> getHotProducts(int limit) {
+        return repo.findTop6ByActiveTrueOrderByIdDesc();
+    }
+
 }

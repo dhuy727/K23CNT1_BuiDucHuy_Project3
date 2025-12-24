@@ -84,19 +84,16 @@ public class BdhAdminOrderController {
 
         OrderStatus current = order.getStatus();
 
-        // DONE/CANCEL: khóa
         if (current == OrderStatus.DONE || current == OrderStatus.CANCEL) {
             ra.addFlashAttribute("bdhMsg", "Đơn hàng đã kết thúc, không thể thay đổi!");
             return "redirect:/admin/orders/" + id;
         }
 
-        // check flow
         if (!isValidTransition(current, newStatus)) {
             ra.addFlashAttribute("bdhMsg", "Chuyển trạng thái không hợp lệ!");
             return "redirect:/admin/orders/" + id;
         }
 
-        // trừ kho khi DONE
         if (newStatus == OrderStatus.DONE) {
             for (var d : order.getDetails()) {
                 var product = d.getProduct();

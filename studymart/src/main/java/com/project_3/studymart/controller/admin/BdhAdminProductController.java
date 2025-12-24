@@ -65,7 +65,7 @@ public class BdhAdminProductController {
         form.setBrand(p.getBrand());
         form.setImageUrl(p.getImageUrl());
         form.setActive(p.getActive());
-        form.setCategoryId(p.getCategory() != null ? p.getCategory().getId() : null);
+            form.setCategoryId(p.getCategory() != null ? p.getCategory().getId() : null);
 
         model.addAttribute("form", form);
         model.addAttribute("mode", "edit");

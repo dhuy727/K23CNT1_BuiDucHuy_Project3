@@ -104,7 +104,6 @@
         ...options
       });
 
-      // đọc body để lấy message lỗi
       const text = await res.text();
       let data = null;
       try { data = text ? JSON.parse(text) : null; } catch (e) {}

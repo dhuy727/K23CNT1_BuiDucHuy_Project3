@@ -19,21 +19,20 @@ public class BdhProduct {
     private String description;
 
     @Column(nullable = false)
-    private Double price;          // giá bán
+    private Double price;
 
     @Column(nullable = false)
-    private Integer quantity;      // số lượng tồn kho
-
+    private Integer quantity;
     @Column(length = 100)
-    private String brand;          // thương hiệu (Thiên Long, Deli,...)
+    private String brand;
 
     @Column(name = "image_url", length = 255)
-    private String imageUrl;       // link ảnh
+    private String imageUrl;
 
     @Column(nullable = false)
-    private Boolean active = true; // có được bán hay không
+    private Boolean active = true;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-    private BdhCategory category;     // mỗi sản phẩm thuộc 1 danh mục
+    private BdhCategory category;
 }

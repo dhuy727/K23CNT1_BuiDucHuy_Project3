@@ -79,7 +79,6 @@ public class BdhAdminNewsController {
             return "redirect:/admin/news";
         }
 
-        // đảm bảo update đúng bản ghi
         bdhNews.setId(id);
         newsRepository.save(bdhNews);
 

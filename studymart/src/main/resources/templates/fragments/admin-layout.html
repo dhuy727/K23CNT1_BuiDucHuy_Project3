@@ -5,25 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title th:text="${title}">Admin - StudyMart</title>
     <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <style>
-        body { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
-        .card { border-radius: 16px; }
-        .shadow-soft { box-shadow: 0 10px 30px rgba(0,0,0,.06); }
-        .btn { border-radius: 12px; }
-        .admin-shell { min-height: 100vh; }
-        .admin-sidebar { width: 260px; }
-        @media (max-width: 992px) { .admin-sidebar { width: 100%; } }
-        .nav-pills .nav-link.active { font-weight: 600; }
-    </style>
-
 </head>
 
 <body>
-<!-- ADMIN NAVBAR TOP -->
 <nav th:fragment="adminTopbar"
      class="navbar navbar-dark bg-dark border-bottom">
     <div class="container-fluid">
@@ -38,7 +27,6 @@
     </div>
 </nav>
 
-<!-- ADMIN SIDEBAR + CONTENT WRAPPER -->
 <div th:fragment="adminShell(activePage)"
      class="admin-shell d-flex flex-column flex-lg-row">
 
@@ -98,7 +86,6 @@
         </div>
     </aside>
 
-    <!-- Main content -->
     <main class="flex-grow-1 p-3 p-lg-4">
         <!-- vùng tiêu đề trang -->
         <div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
@@ -109,7 +96,6 @@
         </div>
 
         <div th:insert="~{::adminContent}">
-            <!-- default -->
         </div>
     </main>
 </div>

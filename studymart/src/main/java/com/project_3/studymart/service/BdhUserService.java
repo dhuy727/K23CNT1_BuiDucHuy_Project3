@@ -102,7 +102,6 @@ public class BdhUserService {
         if (role == null) throw new RuntimeException("Role invalid");
         role = role.trim().toUpperCase();
 
-        // nhận cả 2 kiểu input: ADMIN/USER hoặc ROLE_ADMIN/ROLE_USER
         if (role.equals("ADMIN") || role.equals("ROLE_ADMIN")) return "ADMIN";
         if (role.equals("USER")  || role.equals("ROLE_USER"))  return "USER";
 
@@ -157,8 +156,8 @@ public class BdhUserService {
         }
 
         try {
-            repo.delete(u);   // xóa hẳn
-            repo.flush();     // bắt lỗi DB ngay nếu có FK khác
+            repo.delete(u);
+            repo.flush();
         } catch (DataIntegrityViolationException e) {
             throw new RuntimeException("Không thể xóa do ràng buộc dữ liệu liên quan.");
         }

@@ -69,28 +69,7 @@
                         </td>
 
                         <td class="text-end">
-                            <form th:if="${u.active}"
-                                  th:action="@{'/admin/users/' + ${u.id} + '/active'}"
-                                  method="post" class="d-inline">
-                                <input type="hidden" name="q" th:value="${q}">
-                                <input type="hidden" name="page" th:value="${p.number}">
-                                <input type="hidden" name="active" value="false">
-                                <button class="btn btn-sm btn-outline-danger" type="submit">Khóa</button>
-                            </form>
 
-                            <form th:unless="${u.active}"
-                                  th:action="@{'/admin/users/' + ${u.id} + '/active'}"
-                                  method="post" class="d-inline">
-                                <input type="hidden" name="q" th:value="${q}">
-                                <input type="hidden" name="page" th:value="${p.number}">
-                                <input type="hidden" name="active" value="true">
-                                <button class="btn btn-sm btn-success" type="submit">Mở</button>
-                            </form>
-
-                            <a class="btn btn-sm btn-outline-secondary"
-                               th:href="@{/admin/users/create-admin}">
-                                + Admin
-                            </a>
                             <a class="btn btn-sm btn-outline-primary"
                                th:href="@{'/admin/users/' + ${u.id} + '/edit'}">
                                 Sửa

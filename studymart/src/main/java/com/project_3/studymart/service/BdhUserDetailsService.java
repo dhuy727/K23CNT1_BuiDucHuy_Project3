@@ -25,7 +25,7 @@ public class BdhUserDetailsService implements UserDetailsService {
         return User.builder()
                 .username(user.getUsername())
                 .password(user.getPassword())
-                .roles(user.getRole()) // USER / ADMIN
+                .roles(user.getRole())
                 .disabled(!user.getActive())
                 .build();
     }

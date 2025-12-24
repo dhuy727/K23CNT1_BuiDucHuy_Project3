@@ -22,7 +22,7 @@ public class GlobalModelAdvice {
     @ModelAttribute("username")
     public String username(Authentication auth) {
         if (auth == null || !auth.isAuthenticated()) return null;
-        return auth.getName(); // ví dụ: "khanh"
+        return auth.getName();
     }
 
 }

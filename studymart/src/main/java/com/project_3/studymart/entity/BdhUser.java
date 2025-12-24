@@ -30,7 +30,6 @@ public class BdhUser {
     @Column(length = 255)
     private String address;
 
-    // ROLE_USER, ROLE_ADMIN… (để đơn giản mình lưu "USER" hoặc "ADMIN")
     @Column(nullable = false, length = 20)
     private String role = "USER";
 

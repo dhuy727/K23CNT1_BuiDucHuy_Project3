@@ -16,7 +16,7 @@ public class BdhHomeController {
 
     @GetMapping({"/", "/index"})
     public String index(Model model) {
-        model.addAttribute("products", productService.getAll());
+        model.addAttribute("products", productService.getHotProducts(6));
         model.addAttribute("news", newsService.getActiveNews());
         return "index";
     }

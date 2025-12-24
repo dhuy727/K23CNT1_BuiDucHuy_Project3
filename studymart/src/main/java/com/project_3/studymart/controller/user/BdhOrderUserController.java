@@ -25,7 +25,7 @@ public class BdhOrderUserController {
 
         var orders = orderRepo.findByUserIdOrderByOrderDateDesc(user.getId());
         model.addAttribute("orders", orders);
-        return "my-orders"; // đúng theo cây thư mục bạn đang để templates/
+        return "my-orders";
     }
 
     @GetMapping("/my-orders/{id}")
@@ -40,6 +40,6 @@ public class BdhOrderUserController {
 
         model.addAttribute("order", order);
         model.addAttribute("details", detailRepo.findByOrderId(id));
-        return "my-order-detail"; // templates/
+        return "my-order-detail";
     }
 }
