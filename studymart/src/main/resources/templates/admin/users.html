@@ -115,7 +115,8 @@
                 </nav>
             </div>
         </div>
-
+        <div th:if="${bdhMsg}" class="alert alert-success" th:text="${bdhMsg}"></div>
+        <div th:if="${bdhError}" class="alert alert-danger" th:text="${bdhError}"></div>
     </div>
 </div>
 

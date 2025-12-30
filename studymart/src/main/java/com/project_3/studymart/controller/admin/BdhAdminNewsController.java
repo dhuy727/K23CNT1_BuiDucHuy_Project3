@@ -48,11 +48,11 @@ public class BdhAdminNewsController {
         return "redirect:/admin/news";
     }
 
-    @GetMapping("/edit/{id}")
+    @GetMapping("/{id}/edit")
     public String bdhEditForm(@PathVariable Long id, Model model, RedirectAttributes ra) {
         var newsOpt = newsRepository.findById(id);
         if (newsOpt.isEmpty()) {
-            ra.addFlashAttribute("bdhMsg", "Không tìm thấy tin tức!");
+            ra.addFlashAttribute("bdhError", "Không tìm thấy tin tức!");
             return "redirect:/admin/news";
         }
         model.addAttribute("bdhNews", newsOpt.get());
@@ -60,7 +60,7 @@ public class BdhAdminNewsController {
         return "admin/new-form";
     }
 
-    @PostMapping("/edit/{id}")
+    @PostMapping("/{id}/edit")
     public String bdhUpdate(
             @PathVariable Long id,
             @Valid @ModelAttribute("bdhNews") BdhNews bdhNews,
@@ -75,7 +75,7 @@ public class BdhAdminNewsController {
 
         var currentOpt = newsRepository.findById(id);
         if (currentOpt.isEmpty()) {
-            ra.addFlashAttribute("bdhMsg", "Không tìm thấy tin tức!");
+            ra.addFlashAttribute("bdhError", "Không tìm thấy tin tức!");
             return "redirect:/admin/news";
         }
 
@@ -89,7 +89,7 @@ public class BdhAdminNewsController {
     @PostMapping("/delete/{id}")
     public String bdhDelete(@PathVariable Long id, RedirectAttributes ra) {
         if (!newsRepository.existsById(id)) {
-            ra.addFlashAttribute("bdhMsg", "Không tìm thấy tin tức!");
+            ra.addFlashAttribute("bdhError", "Không tìm thấy tin tức!");
             return "redirect:/admin/news";
         }
         newsRepository.deleteById(id);

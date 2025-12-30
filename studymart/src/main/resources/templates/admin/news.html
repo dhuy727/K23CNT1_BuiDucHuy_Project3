@@ -62,7 +62,7 @@
 
                         <td class="text-end">
                             <a class="btn btn-sm btn-outline-primary"
-                               th:href="@{/admin/news/edit/{id}(id=${n.id})}">Sửa</a>
+                               th:href="@{'/admin/news/' + ${n.id} + '/edit'}">Sửa</a>
 
                             <form th:action="@{/admin/news/delete/{id}(id=${n.id})}"
                                   method="post" style="display:inline"

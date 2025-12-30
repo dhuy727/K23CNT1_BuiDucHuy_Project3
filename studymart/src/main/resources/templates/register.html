@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('StudyMart - Đăng nhập')}">
+<head th:replace="~{fragments/layout :: head('StudyMart - Đăng ký')}">
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>StudyMart - Đăng ký</title>
@@ -70,7 +70,7 @@
 
 <script th:src="@{/js/main.js}"></script>
 <script>
-    const REGISTER_ENDPOINT = "/api/auth/register";
+    const REGISTER_ENDPOINT = "/register";
 ;
 
     document.getElementById("regForm").addEventListener("submit", async (e) => {

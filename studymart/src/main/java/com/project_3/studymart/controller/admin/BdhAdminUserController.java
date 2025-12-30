@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor
@@ -66,10 +67,22 @@ public class BdhAdminUserController {
                           @RequestParam String role,
                           @RequestParam(required = false) String q,
                           @RequestParam(defaultValue = "0") int page,
-                          Authentication auth) {
-        userService.adminSetRole(id, role, auth.getName());
-        return "redirect:/admin/users?q=" + (q == null ? "" : q) + "&page=" + page;
+                          Authentication auth,
+                          RedirectAttributes redirectAttributes) {
+        try {
+            userService.adminSetRole(id, role, auth.getName());
+            redirectAttributes.addFlashAttribute("bdhMsg", "Cập nhật quyền thành công.");
+        } catch (RuntimeException ex) {
+            redirectAttributes.addFlashAttribute("bdhError", ex.getMessage());
+        }
+
+        redirectAttributes.addAttribute("q", q == null ? "" : q);
+        redirectAttributes.addAttribute("page", page);
+
+        return "redirect:/admin/users";
     }
+
+
     @GetMapping("/users/create")
     public String createUserForm(Model model) {
         model.addAttribute("form", new BdhRegisterRequest());
@@ -90,6 +103,26 @@ public class BdhAdminUserController {
             return "admin/user-create";
         }
     }
+
+    @PostMapping("/{id}/role")
+    public String updateUserRole(@PathVariable Long id,
+                                 @RequestParam String role,
+                                 @RequestParam(required = false) String q,
+                                 @RequestParam(defaultValue = "0") int page,
+                                 Authentication auth,
+                                 RedirectAttributes redirectAttributes) {
+        try {
+            userService.adminSetRole(id, role, auth.getName());
+            redirectAttributes.addFlashAttribute("bdhMsg",
+                    "Cập nhật quyền người dùng thành công.");
+        } catch (RuntimeException ex) {
+            redirectAttributes.addFlashAttribute("bdhError",
+                    "Cập nhật quyền thất bại: " + ex.getMessage());
+        }
+
+        return "redirect:/admin/users?q=" + (q == null ? "" : q) + "&page=" + page;
+    }
+
 
     @GetMapping("/users/{id}/edit")
     public String editUserForm(@PathVariable Long id, Model model) {
@@ -129,9 +162,15 @@ public class BdhAdminUserController {
     public String deleteUser(@PathVariable Long id,
                              @RequestParam(required = false) String q,
                              @RequestParam(defaultValue = "0") int page,
-                             Authentication auth) {
-        userService.adminDeleteUserHardA(id, auth.getName());
-        return "redirect:/admin/users?q=" + (q == null ? "" : q) + "&page=" + page + "&okDelete";
-    }
+                             Authentication auth,
+                             RedirectAttributes redirectAttributes) {
+        try {
+            userService.adminDeleteUserHardA(id, auth.getName());
+            redirectAttributes.addFlashAttribute("bdhMsg", "Xóa tài khoản thành công.");
+        } catch (RuntimeException ex) {
+            redirectAttributes.addFlashAttribute("bdhError", ex.getMessage());
+        }
 
+        return "redirect:/admin/users?q=" + (q == null ? "" : q) + "&page=" + page;
+    }
 }

@@ -90,13 +90,14 @@ public class BdhUserService {
         var u = repo.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
         String normalized = normalizeRole(role);
 
-        if (u.getUsername().equalsIgnoreCase(currentUsername) && !"ROLE_ADMIN".equals(normalized)) {
+        if (u.getUsername().equalsIgnoreCase(currentUsername) && !"ADMIN".equals(normalized)) {
             throw new RuntimeException("Không thể tự hạ quyền của chính mình");
         }
 
         u.setRole(normalized);
         repo.save(u);
     }
+
 
     private String normalizeRole(String role) {
         if (role == null) throw new RuntimeException("Role invalid");
