@@ -22,6 +22,10 @@ public interface BdhProductRepository extends JpaRepository<BdhProduct, Long> {
     Page<BdhProduct> findByNameContainingIgnoreCaseOrBrandContainingIgnoreCase(
             String name, String brand, Pageable pageable
     );
+    List<BdhProduct> findByNameContainingIgnoreCaseOrBrandContainingIgnoreCase(
+            String name,
+            String brand
+    );
     List<BdhProduct> findTop6ByActiveTrueOrderByIdDesc();
 
 }

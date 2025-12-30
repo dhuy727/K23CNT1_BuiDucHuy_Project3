@@ -21,7 +21,7 @@ public class BdhAdminDashboardController {
         long totalOrders = orderRepo.count();
         long pendingOrders = orderRepo.countByStatus(OrderStatus.PENDING);
 
-        Double revenue = orderRepo.sumRevenue(); // có thể null khi chưa có đơn
+        Double revenue = orderRepo.sumRevenue();
         if (revenue == null) revenue = 0.0;
 
         List<BdhOrder> latestOrders = orderRepo.findTop5ByOrderByOrderDateDesc();

@@ -97,5 +97,4 @@ public class BdhProductService {
     public List<BdhProduct> getHotProducts(int limit) {
         return repo.findTop6ByActiveTrueOrderByIdDesc();
     }
-
 }

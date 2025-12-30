@@ -92,24 +92,26 @@ a:hover {
   object-fit: cover;
 }
 
-.news-img-item {
+.news-full-img {
   display: block;
-  height: 180px;
-  border-radius: 12px;
+  width: 100%;
+  height: 240px;
+  border-radius: 16px;
   overflow: hidden;
-  position: relative;
-  background-color: #ffffff;
+  background: #eee;
 }
 
-.news-img-item img {
+.news-full-img img {
   width: 100%;
   height: 100%;
-  transition: transform 0.35s ease;
+  object-fit: cover;
+  transition: transform .3s ease;
 }
 
-.news-img-item:hover img {
-  transform: scale(1.06);
+.news-full-img:hover img {
+  transform: scale(1.05);
 }
+
 
 .news-overlay {
   position: absolute;

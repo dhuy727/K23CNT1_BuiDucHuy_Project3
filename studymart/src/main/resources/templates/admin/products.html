@@ -8,11 +8,29 @@
      th:replace="~{fragments/admin-layout :: adminShell('products')}">
 
     <div th:fragment="adminContent">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <div></div>
-            <a class="btn btn-primary" th:href="@{/admin/products/new}">+ Thêm sản phẩm</a>
+
+        <!-- THANH TÌM KIẾM + NÚT THÊM -->
+        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+
+            <form class="d-flex gap-2" th:action="@{/admin/products}" method="get">
+                <input type="search"
+                       class="form-control"
+                       name="q"
+                       placeholder="Tìm theo tên, hãng..."
+                       th:value="${q}">
+                <button class="btn btn-outline-primary" type="submit">Tìm</button>
+                <a class="btn btn-outline-secondary" th:href="@{/admin/products}">Xoá lọc</a>
+
+                <!-- luôn quay về trang 0 khi tìm mới -->
+                <input type="hidden" name="page" value="0"/>
+            </form>
+
+            <a class="btn btn-primary ms-auto" th:href="@{/admin/products/new}">
+                + Thêm sản phẩm
+            </a>
         </div>
 
+        <!-- BẢNG SẢN PHẨM -->
         <div class="card shadow-sm">
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
@@ -30,44 +48,50 @@
                     </thead>
 
                     <tbody>
-                    <tr th:if="${#lists.isEmpty(products)}">
-                        <td colspan="8" class="text-center text-muted py-4">Chưa có sản phẩm.</td>
+                    <!-- Không có sản phẩm -->
+                    <tr th:if="${p.totalElements == 0}">
+                        <td colspan="8" class="text-center text-muted py-4">
+                            Chưa có sản phẩm.
+                            <span th:if="${q != null and !#strings.isEmpty(q)}">
+                                (Không tìm thấy với từ khoá "<b th:text="${q}">q</b>")
+                            </span>
+                        </td>
                     </tr>
 
-                    <tr th:each="p : ${products}">
-                        <td th:text="${p.id}">1</td>
+                    <!-- DANH SÁCH SẢN PHẨM -->
+                    <tr th:each="prd : ${p.content}">
+                        <td th:text="${prd.id}">1</td>
 
                         <td>
-                            <img th:src="${(p.imageUrl != null and !#strings.isEmpty(p.imageUrl))
-                                  ? '/images/products/' + p.imageUrl
+                            <img th:src="${(prd.imageUrl != null and !#strings.isEmpty(prd.imageUrl))
+                                  ? '/images/products/' + prd.imageUrl
                                   : 'https://via.placeholder.com/80x60?text=No+Img'}"
                                  style="width:80px;height:60px;object-fit:cover;border-radius:8px;border:1px solid #eee;" />
-
                         </td>
 
                         <td>
-                            <div class="fw-semibold" th:text="${p.name}">Tên</div>
-                            <div class="text-muted small" th:text="${p.brand}">Brand</div>
+                            <div class="fw-semibold" th:text="${prd.name}">Tên</div>
+                            <div class="text-muted small" th:text="${prd.brand}">Brand</div>
                         </td>
 
-                        <td th:text="${p.category != null ? p.category.name : '-'}">-</td>
+                        <td th:text="${prd.category != null ? prd.category.name : '-'}">-</td>
 
                         <td class="text-end"
-                            th:text="${#numbers.formatDecimal(p.price,0,'COMMA',0,'POINT')} + 'đ'">0đ</td>
+                            th:text="${#numbers.formatDecimal(prd.price,0,'COMMA',0,'POINT')} + 'đ'">0đ</td>
 
-                        <td class="text-center" th:text="${p.quantity}">0</td>
+                        <td class="text-center" th:text="${prd.quantity}">0</td>
 
                         <td class="text-center">
-              <span class="badge"
-                    th:classappend="${p.active} ? ' text-bg-success' : ' text-bg-secondary'"
-                    th:text="${p.active} ? 'ON' : 'OFF'">ON</span>
+                            <span class="badge"
+                                  th:classappend="${prd.active} ? ' text-bg-success' : ' text-bg-secondary'"
+                                  th:text="${prd.active} ? 'ON' : 'OFF'">ON</span>
                         </td>
 
                         <td class="text-end">
                             <a class="btn btn-sm btn-outline-primary"
-                               th:href="@{/admin/products/{id}/edit(id=${p.id})}">Sửa</a>
+                               th:href="@{/admin/products/{id}/edit(id=${prd.id})}">Sửa</a>
 
-                            <form th:action="@{/admin/products/{id}/delete(id=${p.id})}"
+                            <form th:action="@{/admin/products/{id}/delete(id=${prd.id})}"
                                   method="post" style="display:inline"
                                   onsubmit="return confirm('Xóa sản phẩm này?');">
                                 <button class="btn btn-sm btn-outline-danger" type="submit">Xóa</button>
@@ -76,6 +100,37 @@
                     </tr>
                     </tbody>
                 </table>
+            </div>
+
+            <!-- PHÂN TRANG & TỔNG SỐ -->
+            <div class="px-3 py-2 d-flex justify-content-between align-items-center">
+                <div class="text-muted small">
+                    Tổng: <b th:text="${p.totalElements}">0</b> sản phẩm
+                </div>
+
+                <nav th:if="${p.totalPages > 1}">
+                    <ul class="pagination pagination-sm mb-0">
+
+                        <li class="page-item" th:classappend="${p.first} ? 'disabled'">
+                            <a class="page-link"
+                               th:href="@{/admin/products(q=${q}, page=${p.number - 1})}">«</a>
+                        </li>
+
+                        <li class="page-item"
+                            th:each="i : ${#numbers.sequence(0, p.totalPages - 1)}"
+                            th:classappend="${i == p.number} ? 'active'">
+                            <a class="page-link"
+                               th:text="${i + 1}"
+                               th:href="@{/admin/products(q=${q}, page=${i})}">1</a>
+                        </li>
+
+                        <li class="page-item" th:classappend="${p.last} ? 'disabled'">
+                            <a class="page-link"
+                               th:href="@{/admin/products(q=${q}, page=${p.number + 1})}">»</a>
+                        </li>
+
+                    </ul>
+                </nav>
             </div>
         </div>
 

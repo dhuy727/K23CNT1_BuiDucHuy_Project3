@@ -6,6 +6,7 @@ import com.project_3.studymart.entity.BdhProduct;
 import com.project_3.studymart.service.BdhCategoryService;
 import com.project_3.studymart.service.BdhProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,12 +20,21 @@ public class BdhAdminProductController {
     private final BdhCategoryService categoryService;
 
     @GetMapping
-    public String list(Model model) {
+    public String list(@RequestParam(required = false) String q,
+                       @RequestParam(defaultValue = "0") int page,
+                       @RequestParam(defaultValue = "10") int size,
+                       Model model) {
+
+        Page<BdhProduct> p = productService.searchProducts(q, page, size);
+
         model.addAttribute("pageTitle", "Quản lý sản phẩm");
-        model.addAttribute("pageSubtitle", "Thêm / sửa / xóa sản phẩm");
-        model.addAttribute("products", productService.getAll());
+        model.addAttribute("pageSubtitle", "Tìm kiếm, thêm/sửa/xóa sản phẩm");
+
+        model.addAttribute("p", p);
+        model.addAttribute("q", q);
         return "admin/products";
     }
+
 
     @GetMapping("/new")
     public String createForm(Model model) {
